@@ -78,7 +78,7 @@ class TyphoonMap extends React.Component {
     setInterval(() => {
       this.props.dispatch({
         type: "typhoon/fetchData",
-        url: "/wind"
+        url: "http://windcontroller:8888/wind"
         // url: "http://192.168.1.105:8888/typhoon"
       })
     }, 1000)
