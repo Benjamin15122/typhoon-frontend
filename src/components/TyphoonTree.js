@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { Icon, Tree, Timeline, Row, Col, Badge, Descriptions } from 'antd';
 import { connect } from 'dva';
-import CustomButton from './CustomButton';
-import cytoscape from 'cytoscape';
-import cola from 'cytoscape-cola'
+import CustomButton from './CustomButton'
 import Steps from './Steps'
 import styles from './stylesheets/TyphoonTree.css'
-cytoscape.use(cola);
+import AlphaNetwork from '../pages/alpha'
 
 const { TreeNode } = Tree;
 
@@ -24,48 +22,6 @@ class TyphoonTree extends Component {
         bottom: 0
       }
     }
-    this.renderCytoscapeElement = this.renderCytoscapeElement.bind(this);
-  }
-
-  renderCytoscapeElement() {
-    this.cy = cytoscape(
-      {
-        container: document.getElementById('cy'),
-        layout: {
-          name: 'cola',
-          animate: false,
-          randomize: false
-        },
-        style: [
-          {
-            selector: 'node',
-            style: {
-              'background-color': '#66ccff',
-              'shape': 'data(type)',
-              'label': 'data(name)',
-              'width': 20,
-              'height': 20
-            }
-          },
-          {
-            selector: ':parent',
-            style: {
-              'background-opacity': 0.333
-            }
-          },
-          {
-            selector: 'edge',
-            style: {
-              'curve-style': 'bezier',
-              'width': 3,
-              'target-arrow-shape': 'triangle',
-              'line-color': '#61bffc',
-              'target-arrow-color': '#61bffc'
-            }
-          }
-        ],
-        elements: this.props.serviceGraph.elements
-      });
   }
 
 
@@ -95,19 +51,6 @@ class TyphoonTree extends Component {
     this.props.dispatch({
       type: "servicetree/getServiceList",
     });
-    this.props.dispatch({
-      type: "servicegraph/fetchGraphData",
-    })
-  }
-
-  componentDidMount() {
-    this.renderCytoscapeElement();
-  }
-
-
-  componentWillUpdate() {
-    this.cy.unmount();
-    this.renderCytoscapeElement();
   }
 
 
@@ -119,11 +62,6 @@ class TyphoonTree extends Component {
 
 
   render() {
-    let cyStyle = {
-      height: '550px',
-      width: '300px',
-      margin: '20px 0px'
-    };
 
     const serviceNodeList = this.props.serviceList.map((serviceNode) => {
       return (
@@ -223,9 +161,7 @@ class TyphoonTree extends Component {
         </div>
 
         <div className={styles.middleDiv}>
-          <div className="node_selected">
-            <div style={cyStyle} id="cy" />
-          </div>
+          <AlphaNetwork/>
         </div>
 
         <div className={styles.rightDiv}>
