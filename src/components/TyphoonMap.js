@@ -22,7 +22,7 @@ class TyphoonMap extends React.Component {
     /* 受影响城市天气信息 */
     const cityWeatherDiv = (
       <div className={styles.cityWeatherDiv}>
-        <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1}/>
+        <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
       </div>
     )
 
@@ -45,12 +45,16 @@ class TyphoonMap extends React.Component {
     /* 台风路径 */
     const pathPolyline = this.props.typhoonPathPolyline
 
+    /* 台风范围 */
+    const typhoonCircle = this.props.typhoonCircle
+
     return (
       <div className={styles.container} >
-        <Map center={{longitude:119.16,latitude:34.69}} zoom={6}>
+        <Map center={{ longitude: 119.16, latitude: 34.69 }} zoom={6}>
           {pathPolyline}
           {pathMarker}
           {typhoonMarker}
+          {typhoonCircle}
           {cityMarkerList}
           {cityWeatherDiv}
         </Map>
@@ -68,7 +72,8 @@ class TyphoonMap extends React.Component {
     this.state = {
       menuSwitchIn: true,
       menuIn: false,
-      mapChange: true
+      mapChange: true,
+      pauseFetch: false
     }
   }
 
@@ -80,6 +85,16 @@ class TyphoonMap extends React.Component {
         // url: "http://192.168.1.105:8888/typhoon"
       })
     }, 1000)
+  }
+
+  fetchInterval() {
+    if (this.state.pauseFetch) return;
+    this.props.dispatch({
+      type: "typhoon/fetchData",
+      // url: "/typhoon"
+      url: "http://192.168.1.105:8888/typhoon"
+    })
+    setTimeout(this.fetchInterval(), 1000)
   }
 
   cityWeatherParser(cityWeather, parameters) {
@@ -98,9 +113,9 @@ class TyphoonMap extends React.Component {
 
     const options = {
       title: {
-        text:cityWeather.city,
+        text: cityWeather.city,
       },
-      data: cityWeather.weatherData.map((weather)=>{
+      data: cityWeather.weatherData.map((weather) => {
         return {
           type: weather.type,
           dataPoints: weather.dataPoints
@@ -109,7 +124,7 @@ class TyphoonMap extends React.Component {
     }
 
     return (
-      <Chart key={Math.random()} style={style} options={options}/>
+      <Chart key={Math.random()} style={style} options={options} />
     )
   }
 }

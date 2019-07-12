@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import { Polyline } from 'react-amap'
+import { Polyline ,Circle} from 'react-amap'
 
 export default {
   namespace: "typhoon",
@@ -13,8 +13,8 @@ export default {
       speed: null
     },
     path: [],
-    typhoonMarker: null,
     typhoonPathPolyline: null,
+    typhoonCircle: null,
     cityWeatherList: []
   },
   reducers: {
@@ -83,6 +83,11 @@ export default {
         mapCenter: newPath[centerIndex],
         typhoon: typhoonData,
         path: newPath,
+        typhoonCircle: <Circle center={typhoonData.position} radius={80000} style={{
+          fillColor: "blue",
+          fillOpacity: 0.3,
+          strokeOpacity: 0
+        }}/>,
         cityWeatherList: newCityWeatherList,
         typhoonPathPolyline: <Polyline path={newPath} style={{ strokeColor: "#FFFFFF", strokeWeight: "3" }} />
       }

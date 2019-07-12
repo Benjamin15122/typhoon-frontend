@@ -1,3 +1,3 @@
 FROM nginx:latest
-COPY default.conf /etc/nginx/conf.d/default.conf
-ADD dist /usr/app/typhoon/frontend
+COPY nginx/conf/default.conf /etc/nginx/conf.d/
+COPY nginx/www/typhoon /usr/app/typhoon/frontend

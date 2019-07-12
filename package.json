@@ -5,7 +5,8 @@
     "build": "umi build",
     "docker:dev": "rm -rf nginx && umi build && mkdir -p nginx/conf && mkdir -p nginx/logs && mkdir -p nginx/www/typhoon && cp -r dist/ nginx/www/typhoon/ && cp nginx.conf nginx/conf/default.conf && docker-compose up -d",
     "docker:build": "rm -rf nginx && umi build && mkdir -p nginx/conf && mkdir -p nginx/logs && mkdir -p nginx/www/typhoon && cp -r dist/ nginx/www/typhoon/ && cp nginx.conf nginx/conf/default.conf && docker build -t registry.njuics.cn/typhoon-frontend/typhoon-frontend:latest ./",
-    "test": "umi test"
+    "test": "umi test",
+    "update": "rm -rf nginx && umi build && mkdir -p nginx/conf && mkdir -p nginx/logs && mkdir -p nginx/www/typhoon && cp -r dist/ nginx/www/typhoon/ && cp nginx.conf nginx/conf/default.conf"
   },
   "dependencies": {
     "@antv/g2": "^3.5.8-beta.1",
