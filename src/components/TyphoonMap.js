@@ -71,7 +71,7 @@ class TyphoonMap extends React.Component {
       mapChange: true
     }
 
-    this.fetchInterval = this.fetchInterval.bind(this)
+    // this.fetchInterval = this.fetchInterval.bind(this)
   }
 
   componentDidMount() {
