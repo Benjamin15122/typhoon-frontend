@@ -29,6 +29,7 @@ spec:
         - name: frontend
           image: registry.njuics.cn/wdongyu/frontend:VERSION
           imagePullPolicy: Always
+          command: ["nginx", "-g", "daemon off;"]
           ports:
             - containerPort: 80
 ---
