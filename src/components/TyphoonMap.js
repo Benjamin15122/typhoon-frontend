@@ -65,37 +65,37 @@ class TyphoonMap extends React.Component {
   constructor(props) {
     super(props)
 
-    this.mapFunctions = [
-      { type: "followSwitch", icon: "circle", body: () => { console.log("good") } }
-    ]
-
     this.state = {
       menuSwitchIn: true,
       menuIn: false,
-      mapChange: true,
-      pauseFetch: false
+      mapChange: true
     }
+
+    this.fetchInterval = this.fetchInterval.bind(this)
   }
 
   componentDidMount() {
     setInterval(() => {
       this.props.dispatch({
         type: "typhoon/fetchData",
-        url: "/typhoon"
+        url: "/wind"
         // url: "http://192.168.1.105:8888/typhoon"
       })
     }, 1000)
   }
 
-  fetchInterval() {
-    if (this.state.pauseFetch) return;
-    this.props.dispatch({
-      type: "typhoon/fetchData",
-      // url: "/typhoon"
-      url: "http://192.168.1.105:8888/typhoon"
-    })
-    setTimeout(this.fetchInterval(), 1000)
-  }
+  // fetchInterval() {
+  //   if (this.props.pauseSwitch)
+  //     return;
+  //   else {
+  //     this.props.dispatch({
+  //       type: "typhoon/fetchData",
+  //       // url: "/typhoon"
+  //       url: "http://192.168.1.105:8888/typhoon"
+  //     })
+  //     setTimeout(this.fetchInterval(), 1000)
+  //   }
+  // }
 
   cityWeatherParser(cityWeather, parameters) {
 

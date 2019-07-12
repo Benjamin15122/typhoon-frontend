@@ -12,7 +12,7 @@ class App extends React.Component {
   render() {
 
     /* 地图控件 */
-    const map = <TyphoonMap />
+    const map = <TyphoonMap pauseSwitch={this.state.pauseSwitch} />
 
     /* 底部抽屉 */
     const bottomDrawer = (
@@ -73,7 +73,7 @@ class App extends React.Component {
 
     /* 功能列表可使用功能 */
     this.mapFunctions = [
-      { type: "followSwitch", icon: "circle", body: () => { console.log("good") } },
+      { type: "followSwitch", icon: "circle", body: () => { this.setState({ pauseSwitch: !this.state.pauseSwitch }) } },
       { type: "fullScreen", icon: "document", body: () => { this.launchFullscreen(document.getElementById(styles.app)) } }
     ]
 
@@ -81,7 +81,8 @@ class App extends React.Component {
     this.state = {
       menuSwitchIn: true,
       menuIn: false,
-      bottomDrawerPulled: false
+      bottomDrawerPulled: false,
+      pauseSwitch: false
     }
 
     /* 监控鼠标移动事件唤醒抽屉 */
