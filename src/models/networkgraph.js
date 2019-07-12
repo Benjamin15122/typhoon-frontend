@@ -117,7 +117,6 @@ export default {
     },
     reducers: {
         update(state, { payload }) {
-            debugger
             return {
                 data: payload
             }

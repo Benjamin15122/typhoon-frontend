@@ -1,7 +1,8 @@
 import { Component } from 'react'
 import G6 from '@antv/g6'
 import * as d3 from 'd3'
-import {connect} from 'dva'
+import { connect } from 'dva'
+import styles from '../components/stylesheets/FlexibleView.css'
 var Util = G6.Util
 var dashArray = [[0, 1], [0, 2], [1, 2], [0, 1, 1, 2], [0, 2, 1, 2], [1, 2, 1, 2], [2, 2, 1, 2], [3, 2, 1, 2], [4, 2, 1, 2]];
 var lineDash = [4, 2, 1, 2];
@@ -175,17 +176,24 @@ class AlphaNetwork extends Component {
     graph = {}
     data = {}
 
+    constructor(props) {
+        super(props);
+
+        this.saveRef = ref => { this.refDom = ref };
+    }
+
     componentWillMount() {
         this.props.dispatch({
-          type: "networkgraph/fetchGraphData",
+            type: "networkgraph/fetchGraphData",
         })
-      }
+    }
 
     componentDidMount() {
+        const {clientHeight,clientWidth} = this.refs.container
         var graph = new G6.Graph({
             container: 'mountNode',
-            width: window.innerWidth,
-            height: window.innerHeight,
+            width: clientWidth,
+            height: clientHeight,
             autoPaint: false,
             defaultNode: {
                 size: [30, 30],
@@ -206,7 +214,7 @@ class AlphaNetwork extends Component {
 
         var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
             return d.id;
-        }).strength(0.02)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
+        }).strength(0.02)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
 
         function refreshPosition(e) {
             e.item.get('model').x = e.x;
@@ -245,12 +253,14 @@ class AlphaNetwork extends Component {
     }
 
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         var data = this.props.data
         var graph = this.graph
+        const {clientWidth, clientHeight} = this.refDom;
+        console.log(clientHeight)
         var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
             return d.id;
-        }).strength(0.02)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(window.innerWidth / 2, window.innerHeight / 2));
+        }).strength(0.02)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
         simulation.nodes(data.nodes).on("tick", ticked);
         simulation.force("link").links(data.edges);
         function ticked() {
@@ -271,12 +281,14 @@ class AlphaNetwork extends Component {
 
 
     render() {
-        return <div id="mountNode" />
+        return <div className={styles.container} ref="container">
+                <div id="mountNode" ref={this.saveRef}/>
+            </div>
     }
 }
 
 export default connect((state) => {
     return {
-      data: state.networkgraph.data
+        data: state.networkgraph.data
     }
-  })(AlphaNetwork);
+})(AlphaNetwork);
