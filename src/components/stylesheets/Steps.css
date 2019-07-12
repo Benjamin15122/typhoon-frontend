@@ -1,0 +1,58 @@
+.svgContainer {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 50%;
+}
+
+.pending {
+  fill: black;
+}
+
+.line {
+  stroke: blue;
+  stroke-width: 3px;
+}
+
+.titleContainer {
+  position: absolute;
+  left: 0%;
+  top: 50%;
+  width: 100%;
+  height: 50%;
+
+  text-align: center;
+}
+
+.step_1 {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 25%;
+  height: 100%;
+}
+
+.step_2 {
+  position: absolute;
+  left: 25%;
+  top: 0%;
+  width: 25%;
+  height: 100%;
+}
+
+.step_3 {
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  width: 25%;
+  height: 100%;
+}
+
+.step_4 {
+  position: absolute;
+  left: 75%;
+  top: 0%;
+  width: 25%;
+  height: 100%;
+}

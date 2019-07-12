@@ -1,0 +1,91 @@
+.container {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+/* 城市天气组件 */
+
+.cityWeatherDiv{
+  position: absolute;
+  left:20%;
+  top:5%;
+  width: 60%;
+  height: 15%;
+}
+
+.cityMarker {
+  width: 3vmin;
+  height: 3vmin;
+}
+
+.cityMarkerIcon {
+  position: absolute;
+  left: -50%;
+  top: -50%;
+
+  width: 100%;
+  height: 100%;
+
+  background-size: 100% 100%;
+  background-image: url(../../assets/city_red.png);
+  animation: shine 0.5s linear infinite;
+}
+
+/* 台风组件 */
+.typhoonMarker {
+  width: 3vmin;
+  height: 3vmin;
+}
+
+.typhoonMarkerIcon {
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  background-image: url(../../assets/typhoonIcon.png);
+  animation: rotate 1s linear infinite
+}
+
+.pathMarker{
+  width: 5px;
+  height: 5px;
+}
+
+.pathMarkerIcon {
+  position: absolute;
+  left: -50%;
+  top: -50%;
+  width: 100%;
+  height: 100%;
+  background-color: aqua;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  100% {
+    transform: rotate(360deg)
+  }
+}
+
+@keyframes shine {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}

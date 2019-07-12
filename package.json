@@ -1,0 +1,49 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "umi dev",
+    "build": "umi build",
+    "docker:dev": "rm -rf nginx && umi build && mkdir -p nginx/conf && mkdir -p nginx/logs && mkdir -p nginx/www/typhoon && cp -r dist/ nginx/www/typhoon/ && cp nginx.conf nginx/conf/default.conf && docker-compose up -d",
+    "docker:build": "rm -rf nginx && umi build && mkdir -p nginx/conf && mkdir -p nginx/logs && mkdir -p nginx/www/typhoon && cp -r dist/ nginx/www/typhoon/ && cp nginx.conf nginx/conf/default.conf && docker build -t registry.njuics.cn/typhoon-frontend/typhoon-frontend:latest ./",
+    "test": "umi test"
+  },
+  "dependencies": {
+    "@antv/g2": "^3.5.8-beta.1",
+    "amap-js": "^1.2.1",
+    "animejs": "^3.0.1",
+    "antd": "^3.20.1",
+    "bizcharts": "^3.5.4",
+    "cytoscape": "^3.8.1",
+    "cytoscape-cola": "^2.3.0",
+    "d3": "^5.9.7",
+    "dva": "^2.4.1",
+    "react": "^16.8.6",
+    "react-amap": "^1.2.8",
+    "react-dom": "^16.8.6",
+    "react-native": "^0.60.0",
+    "react-transition-group": "^4.2.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^9.0.0",
+    "eslint": "^5.4.0",
+    "eslint-config-umi": "^1.4.0",
+    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^7.2.2",
+    "react-test-renderer": "^16.7.0",
+    "umi": "^2.7.7",
+    "umi-plugin-react": "^1.8.4"
+  },
+  "//":{"lint-staged": {
+    "*.{js,jsx}": [
+      "eslint --fix",
+      "git add"
+    ]
+  }},
+  "engines": {
+    "node": ">=8.0.0"
+  }
+}
