@@ -11,8 +11,8 @@
 }
 
 .line {
-  stroke: blue;
-  stroke-width: 3px;
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: 2px;
 }
 
 .titleContainer {

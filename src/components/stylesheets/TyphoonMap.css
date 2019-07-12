@@ -59,11 +59,12 @@
 
 .pathMarkerIcon {
   position: absolute;
-  left: -50%;
-  top: -50%;
-  width: 100%;
-  height: 100%;
+  left: -2.5px;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
   background-color: aqua;
+  border-radius: 2.5px;
 }
 
 @keyframes rotate {
