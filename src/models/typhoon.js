@@ -23,14 +23,18 @@ export default {
       /* 生成台风路径 由于路径点为循环获取 当路径闭合时不再进行绘制 */
       var newPath = state.path
 
-      if (newPath.length === 0 || (
-        newPath[0].longitude !== typhoonData.position.longitude &&
-        newPath[0].latitude !== typhoonData.position.latitude
-      )) {
+      if (newPath.length === 0) {
         newPath = newPath.concat(typhoonData.position)
       }
+      else if (typhoonData.position.longitude === 127.5 && typhoonData.position.latitude === 27.0) {
+        newPath = [typhoonData.position]
+      }
+      else {
+        newPath = newPath.concat(typhoonData.position)
+      }
+      // 127.5 27.0
 
-      var centerIndex = Math.floor(newPath.length/2)
+      var centerIndex = Math.floor(newPath.length / 2)
 
       /* 生成城市天气信息 */
       const newCityWeatherList = cityWeatherDataList.map((cityWeatherData) => {
@@ -80,7 +84,7 @@ export default {
         typhoon: typhoonData,
         path: newPath,
         cityWeatherList: newCityWeatherList,
-        typhoonPathPolyline: <Polyline path={newPath} style={{strokeColor:"#FFFFFF",strokeWeight: "3"}}/>
+        typhoonPathPolyline: <Polyline path={newPath} style={{ strokeColor: "#FFFFFF", strokeWeight: "3" }} />
       }
     }
   },
