@@ -1,8 +1,8 @@
 
 // ref: https://umijs.org/config/
 export default {
-  base: '/typhoon/',
-  publicPath: '/typhoon/',
+  base: '/',
+  publicPath: '/',
   "proxy": {
     "/api": {
       "target": "http://114.212.189.141:30170/",
