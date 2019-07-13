@@ -75,13 +75,13 @@ class TyphoonMap extends React.Component {
   }
 
   componentDidMount() {
-    setInterval(() => {
-      this.props.dispatch({
-        type: "typhoon/fetchData",
-        url: "/wind"
-        // url: "http://192.168.1.105:8888/typhoon"
-      })
-    }, 1000)
+    // setInterval(() => {
+    //   this.props.dispatch({
+    //     type: "typhoon/fetchData",
+    //     url: "/wind"
+    //     // url: "http://192.168.1.105:8888/typhoon"
+    //   })
+    // }, 1000)
   }
 
   // fetchInterval() {

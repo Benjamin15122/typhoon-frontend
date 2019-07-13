@@ -12,7 +12,7 @@ class App extends React.Component {
   render() {
 
     /* 地图控件 */
-    const map = <TyphoonMap pauseSwitch={this.state.pauseSwitch} />
+    // const map = <TyphoonMap pauseSwitch={this.state.pauseSwitch} />
 
     /* 底部抽屉 */
     const bottomDrawer = (
@@ -49,12 +49,21 @@ class App extends React.Component {
       </Drawer>
     )
 
+    /* I2EC 水印 */
+    const I2EC = (
+      <svg className={styles.I2EC}>
+        <path className={styles.path_I} d="M0 0 "/>
+      </svg>
+    )
+
+
     return (
       <div id={styles.app} onMouseMoveCapture={(e) => { this.pullDrawerCapture(e) }} >
-        {map}
+        {/* {map} */}
         {menuSwitch}
         {menu}
         {bottomDrawer}
+        {I2EC}
       </div>
     )
   }
@@ -119,4 +128,4 @@ class App extends React.Component {
   }
 }
 
-export default connect((state) => { return state.app })(App) 
+export default App
