@@ -36,14 +36,15 @@ class TyphoonMap extends React.Component {
       return (
         <TyphoonMarker key={cityWeather.city} className={styles.cityMarker} position={cityWeather.position}>
           <div className={styles.cityMarkerIcon} />
-          {/* {cityWeather.weatherData.map((weather,index) => {
+          {cityWeather.weatherData.map((weather,index) => {
 
             const style = {
               position: "absolute",
               left: 0+"%",
               top: index*25+"%",
               width: "100%",
-              height: "25%"
+              height: "25%",
+              backgroundColor: "white"
             }
 
             return (
@@ -52,30 +53,30 @@ class TyphoonMap extends React.Component {
                 <div className={styles.cityWeatherValue}>{weather.dataPoints[weather.dataPoints.length - 1].y.toFixed(3)}</div>
               </div>
             )
-          })} */}
+          })}
         </TyphoonMarker>
       )
     })
 
     /* 受影响城市天气信息 */
-    const cityWeatherDiv = (
-      <div className={styles.cityWeatherDiv}>
-        <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
-      </div>
-    )
+    // const cityWeatherDiv = (
+    //   <div className={styles.cityWeatherDiv}>
+    //     <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
+    //   </div>
+    // )
 
-    const chartLegend = this.props.cityWeatherList.length > 0 ? (
-      <div className={styles.chartLegend}>
-        <div style={{position:"absolute",left:"0%",top:"6%",width:"30%",height:"3px",backgroundColor:colorTransform['wind']}}/>
-        <div style={{position:"absolute",left:"35%",top:"0%",width:"65%",height:"25%"}}>{nameTransform['wind']}</div> 
-        <div style={{position:"absolute",left:"0%",top:"31%",width:"30%",height:"3px",backgroundColor:colorTransform['temp']}}/>
-        <div style={{position:"absolute",left:"35%",top:"25%",width:"65%",height:"25%"}}>{nameTransform['temp']}</div> 
-        <div style={{position:"absolute",left:"0%",top:"56%",width:"30%",height:"3px",backgroundColor:colorTransform['precipitation']}}/>
-        <div style={{position:"absolute",left:"35%",top:"50%",width:"65%",height:"25%"}}>{nameTransform['precipitation']}</div> 
-        <div style={{position:"absolute",left:"0%",top:"81%",width:"30%",height:"3px",backgroundColor:colorTransform['pressure']}}/>
-        <div style={{position:"absolute",left:"35%",top:"75%",width:"65%",height:"25%"}}>{nameTransform['pressure']}</div> 
-      </div>
-    ) : null
+    // const chartLegend = this.props.cityWeatherList.length > 0 ? (
+    //   <div className={styles.chartLegend}>
+    //     <div style={{position:"absolute",left:"0%",top:"6%",width:"30%",height:"3px",backgroundColor:colorTransform['wind']}}/>
+    //     <div style={{position:"absolute",left:"35%",top:"0%",width:"65%",height:"25%"}}>{nameTransform['wind']}</div> 
+    //     <div style={{position:"absolute",left:"0%",top:"31%",width:"30%",height:"3px",backgroundColor:colorTransform['temp']}}/>
+    //     <div style={{position:"absolute",left:"35%",top:"25%",width:"65%",height:"25%"}}>{nameTransform['temp']}</div> 
+    //     <div style={{position:"absolute",left:"0%",top:"56%",width:"30%",height:"3px",backgroundColor:colorTransform['precipitation']}}/>
+    //     <div style={{position:"absolute",left:"35%",top:"50%",width:"65%",height:"25%"}}>{nameTransform['precipitation']}</div> 
+    //     <div style={{position:"absolute",left:"0%",top:"81%",width:"30%",height:"3px",backgroundColor:colorTransform['pressure']}}/>
+    //     <div style={{position:"absolute",left:"35%",top:"75%",width:"65%",height:"25%"}}>{nameTransform['pressure']}</div> 
+    //   </div>
+    // ) : null
 
     /* 台风当前位置标记 */
     const typhoonMarker = this.props.typhoon.position ? (
@@ -108,9 +109,9 @@ class TyphoonMap extends React.Component {
           {typhoonOutsideCircle}
           {typhoonInsideCircle}
           {typhoonMarker}
-          {chartLegend}
+          {/* {chartLegend} */}
           {cityMarkerList}
-          {cityWeatherDiv}
+          {/* {cityWeatherDiv} */}
         </Map>
       </div>
     )
