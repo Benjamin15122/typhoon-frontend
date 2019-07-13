@@ -10,6 +10,10 @@
   fill: black;
 }
 
+.finished{
+  fill: green;
+}
+
 .line {
   stroke: rgba(0, 0, 0, 0.5);
   stroke-width: 2px;

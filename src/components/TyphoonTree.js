@@ -108,10 +108,14 @@ class TyphoonTree extends Component {
           </div>
           <div className={styles.detailsDiv}>
             <div className={styles.detailsTitle}>运行细节:</div>
-            <Steps className={styles.detailsValue} />
+            <Steps className={styles.detailsValue} status={branchNodeInfo.detailedstatus} />
           </div>
           <div className={styles.additionDiv} >
-            <div className={styles.branchNodeIcon} />
+            <CustomButton
+              className={styles.branchNodeIcon}
+              clickId={branchNodeInfo.id}
+              clickName={branchNodeInfo.name}
+              buttonClicked={(id, name) => { this.onBranchNodeSelect(id, name) }} />
             <svg className><line className={styles.connectLine} x1="12" y1="13" x2="12" y2="107" /></svg>
           </div>
         </div>
@@ -161,7 +165,7 @@ class TyphoonTree extends Component {
         </div>
 
         <div className={styles.middleDiv}>
-          <AlphaNetwork/>
+          <AlphaNetwork />
         </div>
 
         <div className={styles.rightDiv}>
