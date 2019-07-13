@@ -63,7 +63,7 @@ export default {
           dataRef = cityWeather.weatherData.find(weather => weather.property === data.type)
 
           dataRef.dataPoints = dataRef.dataPoints.concat({
-            x: time,
+            label: time.getHours()+":"+time.getMinutes()+":"+time.getSeconds(),
             y: data.value + Math.random() * 5
           })
 

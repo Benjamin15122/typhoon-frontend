@@ -32,6 +32,8 @@ class TyphoonTree extends Component {
   }
 
   onBranchNodeSelect = (selectedName, selectedId) => {
+    console.log(selectedId)
+    console.log(selectedName)
     this.props.dispatch({
       type: "servicetree/executeDrone", payload: {
         id: selectedId,
@@ -122,7 +124,8 @@ class TyphoonTree extends Component {
     //   )
     // })
 
-    const branchNodeListDisplay = this.props.branchNodeList.map((branchNodeInfo) => {
+    const branchNodeListDisplay = this.props.branchNodeList.map((branchNodeInfo) => {  
+      console.log(branchNodeInfo.status)
       return (
         <Timeline.Item key={branchNodeInfo.id}
           dot={
@@ -130,6 +133,7 @@ class TyphoonTree extends Component {
               clickId={branchNodeInfo.id}
               clickName={branchNodeInfo.name}
               buttonClicked={(e, id, name) => {
+
                 this.onBranchNodeSelect(id, name)
                 // this.props.branchNodeList.forEach((branchNode) => {
                 //   if (branchNode.id===name) {

@@ -49,7 +49,6 @@ export default {
     },
 
     updateBranchNodeStatus(state, { payload }) {
-      console.log(payload.detailedstatus)
       return {
         ...state,
         branchNodeList: state.branchNodeList.map((branchNode) => {
@@ -158,10 +157,10 @@ export default {
     },
 
     *executeDrone({ payload }, { call, put }) {
-      //console.log(payload)
+      console.log(payload)
       const response = yield call(request, {
         // url: '/api/repos/wdongyu/git-test/builds?branch='+payload[0]+'&commit='+payload[1],
-        url: '/api/repos/typhoon/' + payload.name + '/builds?branch=master&commit=' + payload.id,
+        url: '/api/repos/typhoon/' + payload.id + '/builds?branch=master&commit=' + payload.name,
         options: {
           headers: {
             'Authorization': 'Bearer jK72ueqbrjm2TlADbYeZXTngd1UALBGY',
@@ -182,9 +181,10 @@ export default {
     },
 
     *getBranchNodeStatus({ payload }, { call, put }) {
+      console.log(payload)
       while (1) {
         const response = yield call(request, {
-          url: '/api/repos/typhoon/' + payload.name + '/builds/' + payload.commitnumber,
+          url: '/api/repos/typhoon/' + payload.id + '/builds/' + payload.commitnumber,
           options: {
             headers: {
               'Authorization': 'Bearer jK72ueqbrjm2TlADbYeZXTngd1UALBGY',
@@ -192,10 +192,11 @@ export default {
             }
           }
         });
+        console.log(response)
         yield put({
           type: 'updateBranchNodeStatus',
           payload: {
-            id: payload.id,
+            id: payload.name,
             status: response.status,
             detailedstatus: {
               clone: response.stages[0].steps[0].status,

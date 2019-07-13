@@ -33,8 +33,6 @@ class TyphoonMap extends React.Component {
     /* 台风沿途受影响城市标记 */
     const cityMarkerList = this.props.cityWeatherList.map((cityWeather) => {
 
-      console.log(cityWeather.city, cityWeather.position)
-
       return (
         <TyphoonMarker key={cityWeather.city} className={styles.cityMarker} position={cityWeather.position}>
           <div className={styles.cityMarkerIcon} />
@@ -68,14 +66,14 @@ class TyphoonMap extends React.Component {
 
     const chartLegend = this.props.cityWeatherList.length > 0 ? (
       <div className={styles.chartLegend}>
-        <div style={{position:"absolute",left:"0%",top:"5%",width:"30%",height:"3px",backgroundColor:colorTransform['wind']}}/>
-        <div style={{position:"absolute",left:"30%",top:"0%",width:"70%",height:"25%"}}>{nameTransform['wind']}</div> 
-        <div style={{position:"absolute",left:"0%",top:"30%",width:"30%",height:"3px",backgroundColor:colorTransform['temp']}}/>
-        <div style={{position:"absolute",left:"30%",top:"25%",width:"70%",height:"25%"}}>{nameTransform['temp']}</div> 
-        <div style={{position:"absolute",left:"0%",top:"55%",width:"30%",height:"3px",backgroundColor:colorTransform['precipitation']}}/>
-        <div style={{position:"absolute",left:"30%",top:"50%",width:"70%",height:"25%"}}>{nameTransform['precipitation']}</div> 
-        <div style={{position:"absolute",left:"0%",top:"80%",width:"30%",height:"3px",backgroundColor:colorTransform['pressure']}}/>
-        <div style={{position:"absolute",left:"30%",top:"75%",width:"70%",height:"25%"}}>{nameTransform['pressure']}</div> 
+        <div style={{position:"absolute",left:"0%",top:"6%",width:"30%",height:"3px",backgroundColor:colorTransform['wind']}}/>
+        <div style={{position:"absolute",left:"35%",top:"0%",width:"65%",height:"25%"}}>{nameTransform['wind']}</div> 
+        <div style={{position:"absolute",left:"0%",top:"31%",width:"30%",height:"3px",backgroundColor:colorTransform['temp']}}/>
+        <div style={{position:"absolute",left:"35%",top:"25%",width:"65%",height:"25%"}}>{nameTransform['temp']}</div> 
+        <div style={{position:"absolute",left:"0%",top:"56%",width:"30%",height:"3px",backgroundColor:colorTransform['precipitation']}}/>
+        <div style={{position:"absolute",left:"35%",top:"50%",width:"65%",height:"25%"}}>{nameTransform['precipitation']}</div> 
+        <div style={{position:"absolute",left:"0%",top:"81%",width:"30%",height:"3px",backgroundColor:colorTransform['pressure']}}/>
+        <div style={{position:"absolute",left:"35%",top:"75%",width:"65%",height:"25%"}}>{nameTransform['pressure']}</div> 
       </div>
     ) : null
 
@@ -138,14 +136,14 @@ class TyphoonMap extends React.Component {
     if (!this.props.pause) {
       this.props.dispatch({
         type: "typhoon/fetchData",
-        url: "http://114.212.189.141:32556/wind"
-        // url: "http://192.168.1.105:8888/wind"
+        // url: "http://114.212.189.141:32556/wind"
+        url: "http://192.168.1.105:8888/wind"
       })
 
-      this.props.dispatch({
-        type: "typhoon/fakeData",
-        url: "http://114.212.189.141:32006/rain"
-      })
+      // this.props.dispatch({
+      //   type: "typhoon/fakeData",
+      //   url: "http://114.212.189.141:32006/rain"
+      // })
     }
 
     setTimeout(this.fetchInterval, this.props.speed)
@@ -154,7 +152,7 @@ class TyphoonMap extends React.Component {
   cityWeatherParser(cityWeather, parameters) {
 
     const { divWidth, divHeight, divMin, x, y } = parameters
-    const edge = divMin * 0.8
+    const edge = divMin
 
     const style = {
       position: "absolute",
