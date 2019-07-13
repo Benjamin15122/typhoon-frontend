@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Tree, Timeline, Row, Col, Badge, Descriptions } from 'antd';
+import { Icon, Tree, Timeline, Badge, Descriptions } from 'antd';
 import { connect } from 'dva';
 import CustomButton from './CustomButton'
 import Steps from './Steps'

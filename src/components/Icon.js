@@ -6,7 +6,7 @@ import styles from './stylesheets/Icon.css'
 class Icon extends React.Component {
   render() {
     return (
-      <CSSTransition timeout={1000} in={this.props.in?this.props.in:true} classNames={this.state.transition} unmountOnExit >
+      <CSSTransition timeout={1000} in={this.props.in} classNames={this.state.transition} unmountOnExit >
         <div className={this.props.className} style={this.props.style} ref="container">
           <svg className={styles.container} onClick={this.props.onClick}>
             {this.state.icon}

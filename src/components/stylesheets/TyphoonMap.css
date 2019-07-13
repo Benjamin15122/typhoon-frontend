@@ -11,18 +11,15 @@
 
 .cityWeatherDiv {
   position: absolute;
-  left: 20%;
+  left: 10%;
   top: 5%;
-  width: 60%;
-  height: 15%;
+  width: 80%;
+  height: 20%;
 }
 
 .cityMarker {
   width: 15vmin;
   height: 10vmin;
-
-  background-color: rgba(0, 255, 255, 1);
-  border-radius: 1vmin;
 }
 
 .cityWeatherInfoBar {
@@ -58,7 +55,7 @@
 
   background-size: 100% 100%;
   background-image: url(../../assets/cityBlue.png);
-  animation: shine 0.5s linear infinite;
+  animation: shine 1s linear infinite;
 }
 
 .cityMarkerInfo {
@@ -85,7 +82,7 @@
   height: 3vmin;
   background-size: 100% 100%;
   background-image: url(../../assets/typhoonIcon.png);
-  animation: rotate 1s linear infinite
+  animation: rotate 2s linear infinite
 }
 
 .pathMarker {
