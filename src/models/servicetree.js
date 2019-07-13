@@ -1,5 +1,9 @@
 import request from '../utils/request'
+// import { effects } from 'redux-saga';
 import { delay } from 'dva/saga';
+
+
+
 
 export default {
   namespace: "servicetree",
@@ -77,19 +81,19 @@ export default {
               }
             }
           }
-          if(payload.detailedstatus.clone === "running"){
+          if(payload.detailedstatus.clone == "running"){
             branchNode = {
               ...branchNode,
               detailsnum: 1,
             }
           }
-          if(payload.detailedstatus.publish === "running"){
+          if(payload.detailedstatus.publish == "running"){
             branchNode = {
               ...branchNode,
               detailsnum: 2,
             }
           }
-          if(payload.detailedstatus.deploy === "running"){
+          if(payload.detailedstatus.deploy == "running"){
             branchNode = {
               ...branchNode,
               detailsnum: 3,
