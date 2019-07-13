@@ -222,7 +222,7 @@ class AlphaNetwork extends Component {
 
         var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
             return d.id;
-        }).strength(0.02)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
+        }).strength(0.01)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
 
         function refreshPosition(e) {
             e.item.get('model').x = e.x;
@@ -268,7 +268,7 @@ class AlphaNetwork extends Component {
         console.log(clientHeight)
         var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
             return d.id;
-        }).strength(0.02)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
+        }).strength(0.01)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
         simulation.nodes(data.nodes).on("tick", ticked);
         simulation.force("link").links(data.edges);
         function ticked() {

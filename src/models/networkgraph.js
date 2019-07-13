@@ -26,7 +26,6 @@ const Erase = (services) =>{
         }
     })
     return {
-        ...services,
         elements: {
             nodes: nodes,
             edges: edges
@@ -83,6 +82,7 @@ const DataClean = (services) => {
         if (item.data.isRoot === true) {
             return {
                 ...item.data,
+                label: item.data.app,
                 name: item.data.app,
                 shape: 'background-animate',
                 color: '#40a9ff',
@@ -99,6 +99,7 @@ const DataClean = (services) => {
             }
             return {
                 ...item.data,
+                label: item.data.service,
                 name: item.data.service,
                 shape: 'inner-animate',
                 img: service,
@@ -111,6 +112,7 @@ const DataClean = (services) => {
         else if (item.data.nodeType === 'app') {
             return {
                 ...item.data,
+                label: item.data.workload,
                 name: item.data.workload,
                 shape: 'image',
                 size: [22,22],
