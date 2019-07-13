@@ -8,10 +8,16 @@ import TyphoonMarker from './TyphoonMarker'
 import FlexibleView from './FlexibleView'
 
 const nameTransform = {
-  'wind':'风力 ',
-  'temp':'温度',
-  'precipitation':'降雨量',
-  'pressure':'气压'
+  'wind': '风力 ',
+  'temp': '温度',
+  'precipitation': '降雨量',
+  'pressure': '气压',
+  'Maanshan': '马鞍山',
+  'Nanjing': '南京',
+  'Shanghai': '上海',
+  'suzhou': '苏州',
+  'Changzhou': '常州',
+  'hefei': '合肥'
 }
 
 class TyphoonMap extends React.Component {
@@ -22,7 +28,7 @@ class TyphoonMap extends React.Component {
       return (
         <TyphoonMarker key={cityWeather.city} className={styles.cityMarker} position={cityWeather.position}>
           <div className={styles.cityMarkerIcon} />
-          {cityWeather.weatherData.map((weather,index) => {
+          {/* {cityWeather.weatherData.map((weather,index) => {
 
             const style = {
               position: "absolute",
@@ -38,17 +44,17 @@ class TyphoonMap extends React.Component {
                 <div className={styles.cityWeatherValue}>{weather.dataPoints[weather.dataPoints.length - 1].y.toFixed(3)}</div>
               </div>
             )
-          })}
+          })} */}
         </TyphoonMarker>
       )
     })
 
     /* 受影响城市天气信息 */
-    // const cityWeatherDiv = (
-    //   <div className={styles.cityWeatherDiv}>
-    //     <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
-    //   </div>
-    // )
+    const cityWeatherDiv = (
+      <div className={styles.cityWeatherDiv}>
+        <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
+      </div>
+    )
 
     /* 台风当前位置标记 */
     const typhoonMarker = this.props.typhoon.position ? (
@@ -70,17 +76,19 @@ class TyphoonMap extends React.Component {
     const pathPolyline = this.props.typhoonPathPolyline
 
     /* 台风范围 */
-    const typhoonCircle = this.props.typhoonCircle
+    const typhoonOutsideCircle = this.props.typhoonOutsideCircle
+    const typhoonInsideCircle = this.props.typhoonInsideCircle
 
     return (
       <div className={styles.container} >
         <Map center={{ longitude: 119.16, latitude: 34.69 }} zoom={6}>
           {pathPolyline}
           {pathMarker}
+          {typhoonOutsideCircle}
+          {typhoonInsideCircle}
           {typhoonMarker}
-          {typhoonCircle}
           {cityMarkerList}
-          {/* {cityWeatherDiv} */}
+          {cityWeatherDiv}
         </Map>
       </div>
     )
@@ -95,16 +103,23 @@ class TyphoonMap extends React.Component {
       mapChange: true
     }
 
+    this.fetchInterval = this.fetchInterval.bind(this)
   }
 
   componentDidMount() {
-    setInterval(() => {
+    this.fetchInterval()
+  }
+
+  fetchInterval() {
+    if (!this.props.pause) {
       this.props.dispatch({
         type: "typhoon/fetchData",
         url: "http://114.212.189.141:32556/wind"
         // url: "http://192.168.1.105:8888/wind"
       })
-    }, 3000)
+    }
+
+    setTimeout(this.fetchInterval, this.props.speed)
   }
 
   cityWeatherParser(cityWeather, parameters) {
@@ -118,19 +133,21 @@ class TyphoonMap extends React.Component {
       top: y + (divHeight - edge) * 0.5,
       width: edge,
       height: edge,
-      backgroundColor: "blue"
+      backgroundColor: "rgba(255,255,255,0.8)",
+      borderRadius: "5px"
     }
 
     const options = {
       title: {
-        text: cityWeather.city,
+        text: nameTransform[cityWeather.city],
       },
       data: cityWeather.weatherData.map((weather) => {
         return {
           type: weather.type,
           dataPoints: weather.dataPoints
         }
-      })
+      }),
+      backgroundColor: "rgba(0,0,0,0)"
     }
 
     return (

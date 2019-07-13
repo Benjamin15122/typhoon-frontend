@@ -44,3 +44,11 @@
   height: 50%;
   background-color: rgba(255, 255, 255, 0.7);
 }
+
+.speedSlider{
+  position: absolute;
+  right: 2%;
+  bottom: 10%;
+  width: 2vw;
+  height: 15vw;
+}

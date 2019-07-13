@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'dva'
+import { Slider } from 'antd'
 
 import styles from './index.css'
 import Icon from '../components/Icon'
@@ -12,7 +12,7 @@ class App extends React.Component {
   render() {
 
     /* 地图控件 */
-    const map = <TyphoonMap pauseSwitch={this.state.pauseSwitch} />
+    const map = <TyphoonMap pause={this.state.pause} speed={this.state.speed} />
 
     /* 底部抽屉 */
     const bottomDrawer = (
@@ -49,11 +49,18 @@ class App extends React.Component {
       </Drawer>
     )
 
+    /* 运行速度控制条 */
+    const speedSlider = (
+      <Slider className={styles.speedSlider} vertical step={100} min={500} max={5000} onChange={(v) => { this.setState({ speed: v }) }} />
+    )
+
+
     return (
       <div id={styles.app} onMouseMoveCapture={(e) => { this.pullDrawerCapture(e) }} >
         {map}
         {menuSwitch}
         {menu}
+        {speedSlider}
         {bottomDrawer}
       </div>
     )
@@ -73,8 +80,8 @@ class App extends React.Component {
 
     /* 功能列表可使用功能 */
     this.mapFunctions = [
-      { type: "followSwitch", icon: "circle", body: () => { this.setState({ pauseSwitch: !this.state.pauseSwitch }) } },
-      { type: "fullScreen", icon: "document", body: () => { this.launchFullscreen(document.getElementById(styles.app)) } }
+      { type: "fullScreen", icon: "document", body: () => { this.launchFullscreen(document.getElementById(styles.app)) } },
+      { type: "pauseMove", icon: "circle", body: () => { this.setState({ pause: !this.state.pause }) } }
     ]
 
     /* 功能列表及抽屉开关 */
@@ -82,7 +89,8 @@ class App extends React.Component {
       menuSwitchIn: true,
       menuIn: false,
       bottomDrawerPulled: false,
-      pauseSwitch: false
+      pause: false,
+      speed: 2000
     }
 
     /* 监控鼠标移动事件唤醒抽屉 */
@@ -119,4 +127,4 @@ class App extends React.Component {
   }
 }
 
-export default connect((state) => { return state.app })(App) 
+export default App 
