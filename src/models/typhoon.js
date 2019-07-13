@@ -83,7 +83,7 @@ export default {
         mapCenter: newPath[centerIndex],
         typhoon: typhoonData,
         path: newPath,
-        typhoonOutsideCircle: <Circle center={typhoonData.position} radius={300000} style={{
+        typhoonOutsideCircle: <Circle center={typhoonData.position} radius={90000} style={{
           fillColor: "yellow",
           fillOpacity: 0.3,
           strokeOpacity: 0
@@ -141,6 +141,10 @@ export default {
         typhoonData: typhoonData,
         cityWeatherDataList: cityWeatherDataList
       })
+    },
+
+    *fakeData({ url }, { call, put }) {
+      const response = yield call(request, { url: url })
     }
   }
 }

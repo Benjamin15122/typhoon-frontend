@@ -20,11 +20,21 @@ const nameTransform = {
   'hefei': '合肥'
 }
 
+const colorTransform = {
+  'wind': 'rgba(216,191,216,1)',
+  'temp': 'rgba(128,128,0,1)',
+  'precipitation': 'rgba(240,128,128,1)',
+  'pressure': 'rgba(255,165,0,1)'
+}
+
 class TyphoonMap extends React.Component {
   render() {
 
     /* 台风沿途受影响城市标记 */
     const cityMarkerList = this.props.cityWeatherList.map((cityWeather) => {
+
+      console.log(cityWeather.city, cityWeather.position)
+
       return (
         <TyphoonMarker key={cityWeather.city} className={styles.cityMarker} position={cityWeather.position}>
           <div className={styles.cityMarkerIcon} />
@@ -55,6 +65,19 @@ class TyphoonMap extends React.Component {
         <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
       </div>
     )
+
+    const chartLegend = this.props.cityWeatherList.length > 0 ? (
+      <div className={styles.chartLegend}>
+        <div style={{position:"absolute",left:"0%",top:"5%",width:"30%",height:"3px",backgroundColor:colorTransform['wind']}}/>
+        <div style={{position:"absolute",left:"30%",top:"0%",width:"70%",height:"25%"}}>{nameTransform['wind']}</div> 
+        <div style={{position:"absolute",left:"0%",top:"30%",width:"30%",height:"3px",backgroundColor:colorTransform['temp']}}/>
+        <div style={{position:"absolute",left:"30%",top:"25%",width:"70%",height:"25%"}}>{nameTransform['temp']}</div> 
+        <div style={{position:"absolute",left:"0%",top:"55%",width:"30%",height:"3px",backgroundColor:colorTransform['precipitation']}}/>
+        <div style={{position:"absolute",left:"30%",top:"50%",width:"70%",height:"25%"}}>{nameTransform['precipitation']}</div> 
+        <div style={{position:"absolute",left:"0%",top:"80%",width:"30%",height:"3px",backgroundColor:colorTransform['pressure']}}/>
+        <div style={{position:"absolute",left:"30%",top:"75%",width:"70%",height:"25%"}}>{nameTransform['pressure']}</div> 
+      </div>
+    ) : null
 
     /* 台风当前位置标记 */
     const typhoonMarker = this.props.typhoon.position ? (
@@ -87,6 +110,7 @@ class TyphoonMap extends React.Component {
           {typhoonOutsideCircle}
           {typhoonInsideCircle}
           {typhoonMarker}
+          {chartLegend}
           {cityMarkerList}
           {cityWeatherDiv}
         </Map>
@@ -117,6 +141,11 @@ class TyphoonMap extends React.Component {
         url: "http://114.212.189.141:32556/wind"
         // url: "http://192.168.1.105:8888/wind"
       })
+
+      this.props.dispatch({
+        type: "typhoon/fakeData",
+        url: "http://114.212.189.141:32006/rain"
+      })
     }
 
     setTimeout(this.fetchInterval, this.props.speed)
@@ -125,7 +154,7 @@ class TyphoonMap extends React.Component {
   cityWeatherParser(cityWeather, parameters) {
 
     const { divWidth, divHeight, divMin, x, y } = parameters
-    const edge = divMin
+    const edge = divMin * 0.8
 
     const style = {
       position: "absolute",
@@ -133,8 +162,9 @@ class TyphoonMap extends React.Component {
       top: y + (divHeight - edge) * 0.5,
       width: edge,
       height: edge,
-      backgroundColor: "rgba(255,255,255,0.8)",
-      borderRadius: "5px"
+      backgroundColor: "rgba(255,255,255,0.9)",
+      borderRadius: "5px",
+      boxShadow: "1px 1px 1px 1px rgba(0,0,0,0.5)"
     }
 
     const options = {
@@ -144,6 +174,7 @@ class TyphoonMap extends React.Component {
       data: cityWeather.weatherData.map((weather) => {
         return {
           type: weather.type,
+          color: colorTransform[weather.property],
           dataPoints: weather.dataPoints
         }
       }),
