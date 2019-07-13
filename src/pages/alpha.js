@@ -195,8 +195,16 @@ class AlphaNetwork extends Component {
             width: clientWidth,
             height: clientHeight,
             autoPaint: false,
+            modes: {
+                default: ['drag-canvas', {
+                    type: 'tooltip',
+                    formatText: function formatText(model) {
+                        return '<p>'+model.name+'</p>';
+                    }
+                }]
+            },
             defaultNode: {
-                size: [30, 30],
+                size: [25, 25],
                 color: 'steelblue'
             },
             defaultEdge: {

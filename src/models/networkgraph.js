@@ -2,17 +2,27 @@ import { delay } from 'dva/saga';
 import service from '../assets/service.svg'
 import application from '../assets/application.svg'
 import request from '../utils/request'
-const TrafficErase = (services) =>{
+const Erase = (services) =>{
     const nodes = services.elements.nodes.map((item)=>{
         return {
-            ...item,
-            traffic: ''
+            data: {
+              id: item.data.id,
+              isRoot: item.data.isRoot,
+              nodeType: item.data.nodeType,
+              isUnused: item.data.isUnused,
+              app: item.data.app,
+              service: item.data.service,
+              workload: item.data.workload
+            }
         }
     })
     const edges = services.elements.edges.map((item)=>{
         return {
-            ...item,
-            traffic: ''
+            data: {
+              id: item.data.id,
+              source: item.data.source,
+              target: item.data.target
+            }
         }
     })
     return {
@@ -73,7 +83,7 @@ const DataClean = (services) => {
         if (item.data.isRoot === true) {
             return {
                 ...item.data,
-                label: item.data.app,
+                name: item.data.app,
                 shape: 'background-animate',
                 color: '#40a9ff',
                 size: 25,
@@ -89,7 +99,7 @@ const DataClean = (services) => {
             }
             return {
                 ...item.data,
-                label: item.data.service,
+                name: item.data.service,
                 shape: 'inner-animate',
                 img: service,
                 labelCfg: {
@@ -101,7 +111,7 @@ const DataClean = (services) => {
         else if (item.data.nodeType === 'app') {
             return {
                 ...item.data,
-                label: item.data.workload,
+                name: item.data.workload,
                 shape: 'image',
                 size: [22,22],
                 img: application,
@@ -193,13 +203,13 @@ export default {
             headers.set('Authorization', 'Basic ' + btoa(authString))
             while (true) {
                 const response = yield call(request, {
-                    url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
-                    // url: '/mockdata',
+                    // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
+                    url: '/mockdata',
                     options: {
                         headers: headers
                     }
                 })
-                const pureRes = TrafficErase(response)
+                const pureRes = Erase(response)
                 const noUpdate = Equals(pureRes,lastElements)
                 if(noUpdate===true){
                     return
