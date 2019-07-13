@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import CustomButton from './CustomButton'
 import Steps from './Steps'
 import styles from './stylesheets/TyphoonTree.css'
-import AlphaNetwork from './Alpha'
+import AlphaNetwork from '../pages/alpha'
 
 const { TreeNode } = Tree;
 
@@ -25,7 +25,7 @@ class TyphoonTree extends Component {
   }
 
 
-  onTreeNodeSelect(keys, e) {
+  onTreeNodeSelect = (keys, e) => {
     this.props.dispatch({
       type: "servicetree/getBranch", payload: keys
     })
@@ -73,9 +73,14 @@ class TyphoonTree extends Component {
     })
 
     const microservicesTree = (
-      <Tree showIcon defaultExpandAll defaultSelectedKeys={['0-0-0']} switcherIcon={<Icon type="down" />}
-        onSelect={(keys, e) => { this.props.dispatch({ type: "servicetree/getBranch", payload: keys }) }}>
-        <TreeNode icon={<Icon type="folder" theme="twoTone" />} title="microservices" key="0-0" >
+      <Tree
+        showIcon
+        defaultExpandAll
+        defaultSelectedKeys={['0-0-0']}
+        switcherIcon={<Icon type="down" />}
+        onSelect={this.onTreeNodeSelect}>
+        <TreeNode icon={<Icon type="folder" theme="twoTone" />}
+          title="microservices" key="0-0" >
           {serviceNodeList}
         </TreeNode>
       </Tree>
@@ -107,7 +112,7 @@ class TyphoonTree extends Component {
           </div>
           <div className={styles.additionDiv} >
             <div className={styles.branchNodeIcon} />
-            <svg><line className={styles.connectLine} x1="12" y1="13" x2="12" y2="107" /></svg>
+            <svg className><line className={styles.connectLine} x1="12" y1="13" x2="12" y2="107" /></svg>
           </div>
         </div>
       )
@@ -156,7 +161,7 @@ class TyphoonTree extends Component {
         </div>
 
         <div className={styles.middleDiv}>
-          <AlphaNetwork />
+          <AlphaNetwork/>
         </div>
 
         <div className={styles.rightDiv}>
