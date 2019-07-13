@@ -203,8 +203,8 @@ export default {
             headers.set('Authorization', 'Basic ' + btoa(authString))
             while (true) {
                 const response = yield call(request, {
-                    // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
-                    url: '/mockdata',
+                    url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
+                    // url: '/mockdata',
                     options: {
                         headers: headers
                     }
