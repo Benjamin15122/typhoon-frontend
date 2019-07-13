@@ -135,6 +135,8 @@ export default {
         }
       })
 
+      debugger
+
       yield put({
         type: "updateData",
         time: new Date(),

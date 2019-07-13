@@ -5,6 +5,8 @@ import styles from './stylesheets/Steps.css'
 class Steps extends React.Component {
   render() {
 
+    console.log(this.props.status)
+
     var svg = null
     var title = null
 

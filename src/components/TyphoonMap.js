@@ -7,6 +7,13 @@ import Chart from './Chart'
 import TyphoonMarker from './TyphoonMarker'
 import FlexibleView from './FlexibleView'
 
+const nameTransform = {
+  'wind':'风力 ',
+  'temp':'温度',
+  'precipitation':'降雨量',
+  'pressure':'气压'
+}
+
 class TyphoonMap extends React.Component {
   render() {
 
@@ -15,16 +22,33 @@ class TyphoonMap extends React.Component {
       return (
         <TyphoonMarker key={cityWeather.city} className={styles.cityMarker} position={cityWeather.position}>
           <div className={styles.cityMarkerIcon} />
+          {cityWeather.weatherData.map((weather,index) => {
+
+            const style = {
+              position: "absolute",
+              left: 0+"%",
+              top: index*25+"%",
+              width: "100%",
+              height: "25%"
+            }
+
+            return (
+              <div key={Math.random()} style={style}>
+                <div className={styles.cityWeatherTitle}>{nameTransform[weather.property]}</div>
+                <div className={styles.cityWeatherValue}>{weather.dataPoints[weather.dataPoints.length - 1].y.toFixed(3)}</div>
+              </div>
+            )
+          })}
         </TyphoonMarker>
       )
     })
 
     /* 受影响城市天气信息 */
-    const cityWeatherDiv = (
-      <div className={styles.cityWeatherDiv}>
-        <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
-      </div>
-    )
+    // const cityWeatherDiv = (
+    //   <div className={styles.cityWeatherDiv}>
+    //     <FlexibleView className={styles.cityWeatherDiv} propertyList={this.props.cityWeatherList} parser={this.cityWeatherParser} rowNum={1} />
+    //   </div>
+    // )
 
     /* 台风当前位置标记 */
     const typhoonMarker = this.props.typhoon.position ? (
@@ -56,7 +80,7 @@ class TyphoonMap extends React.Component {
           {typhoonMarker}
           {typhoonCircle}
           {cityMarkerList}
-          {cityWeatherDiv}
+          {/* {cityWeatherDiv} */}
         </Map>
       </div>
     )
@@ -71,31 +95,17 @@ class TyphoonMap extends React.Component {
       mapChange: true
     }
 
-    // this.fetchInterval = this.fetchInterval.bind(this)
   }
 
   componentDidMount() {
     setInterval(() => {
       this.props.dispatch({
         type: "typhoon/fetchData",
-        url: "/wind"
-        // url: "http://192.168.1.105:8888/typhoon"
+        url: "http://114.212.189.141:32556/wind"
+        // url: "http://192.168.1.105:8888/wind"
       })
-    }, 1000)
+    }, 3000)
   }
-
-  // fetchInterval() {
-  //   if (this.props.pauseSwitch)
-  //     return;
-  //   else {
-  //     this.props.dispatch({
-  //       type: "typhoon/fetchData",
-  //       // url: "/typhoon"
-  //       url: "http://192.168.1.105:8888/typhoon"
-  //     })
-  //     setTimeout(this.fetchInterval(), 1000)
-  //   }
-  // }
 
   cityWeatherParser(cityWeather, parameters) {
 
