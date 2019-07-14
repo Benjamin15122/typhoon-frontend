@@ -1,4 +1,4 @@
-apiVersion: v2
+apiVersion: v1
 kind: Service
 metadata:
   name: frontend
@@ -11,17 +11,17 @@ spec:
   selector:
     app: frontend
 ---
-apiVersion: extensions/v2beta1
+apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: frontend-v2
+  name: frontend-v1
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: frontend
-        version: v2
+        version: v1
     spec:
       nodeSelector:
         internet: "true"

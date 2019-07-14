@@ -137,14 +137,14 @@ class TyphoonMap extends React.Component {
     if (!this.props.pause) {
       this.props.dispatch({
         type: "typhoon/fetchData",
-        // url: "http://114.212.189.141:32556/wind"
-        url: "http://192.168.1.105:8888/wind"
+        url: "http://114.212.189.141:32556/wind"
+        // url: "http://192.168.1.105:8888/wind"
       })
 
-      // this.props.dispatch({
-      //   type: "typhoon/fakeData",
-      //   url: "http://114.212.189.141:32006/rain"
-      // })
+      this.props.dispatch({
+        type: "typhoon/fakeData",
+        url: "http://114.212.189.141:32006/rain"
+      })
     }
 
     setTimeout(this.fetchInterval, this.props.speed)
