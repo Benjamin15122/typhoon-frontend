@@ -14,14 +14,14 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: frontend-v1
+  name: frontend-v2
 spec:
   replicas: 1
   template:
     metadata:
       labels:
         app: frontend
-        version: v1
+        version: v2
     spec:
       nodeSelector:
         internet: "true"
