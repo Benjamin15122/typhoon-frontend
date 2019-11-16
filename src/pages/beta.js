@@ -64,10 +64,83 @@ G6.registerNode('inner-animate', {
     }
 }, 'circle');
 
+G6.registerNode('finished-animate', {
+    drawShape: function drawShape(cfg, group) {
+        var r = 12;
+        var color = '#7FFFD4';
+        var keyShape = group.addShape('circle', {
+            zIndex: -3,
+            attrs: {
+                x: 0,
+                y: 0,
+                r: r,
+                fill: color,
+                stroke: '#fff',
+                lineWidth: 2,
+                opacity: 1
+            },
+        });
+        return keyShape
+    },
+    afterDraw: function afterDraw(cfg, group) {
+        var r = 12;
+        var color = '#7FFFD4'
+        var back1 = group.addShape('circle', {
+            zIndex: -3,
+            attrs: {
+                x: 0,
+                y: 0,
+                r: r,
+                fill: color,
+                opacity: 0.6
+            }
+        });
+        var back2 = group.addShape('circle', {
+            zIndex: -2,
+            attrs: {
+                x: 0,
+                y: 0,
+                r: r,
+                fill: color, // 为了显示清晰，随意设置了颜色
+                opacity: 0.6
+            }
+        });
+
+        var back3 = group.addShape('circle', {
+            zIndex: -1,
+            attrs: {
+                x: 0,
+                y: 0,
+                r: r,
+                fill: color,
+                opacity: 0.6
+            }
+        });
+        group.sort(); // 排序，根据zIndex 排序
+        back1.animate({ // 逐渐放大，并消失
+            r: r + 10,
+            opacity: 0.1,
+            repeat: true // 循环
+        }, 3000, 'easeCubic', null, 0); // 无延迟
+
+        back2.animate({ // 逐渐放大，并消失
+            r: r + 10,
+            opacity: 0.1,
+            repeat: true // 循环
+        }, 3000, 'easeCubic', null, 1000); // 1 秒延迟
+
+        back3.animate({ // 逐渐放大，并消失
+            r: r + 10,
+            opacity: 0.1,
+            repeat: true // 循环
+        }, 3000, 'easeCubic', null, 2000); // 2 秒延迟
+    }
+}, 'circle');
+
 G6.registerNode('affected-animate', {
     drawShape: function drawShape(cfg, group) {
         var r = 12;
-        var color = 'FF8000';
+        var color = '#FF8000';
         var keyShape = group.addShape('circle', {
             zIndex: -3,
             attrs: {
