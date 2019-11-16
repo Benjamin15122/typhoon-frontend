@@ -2,6 +2,7 @@ import { Component } from 'react'
 import G6 from '@antv/g6'
 import * as d3 from 'd3'
 import { connect } from 'dva'
+import WebSocketForNetwork from './websocket'
 import styles from '../components/stylesheets/FlexibleView.css'
 var Util = G6.Util
 var dashArray = [[0, 1], [0, 2], [1, 2], [0, 1, 1, 2], [0, 2, 1, 2], [1, 2, 1, 2], [2, 2, 1, 2], [3, 2, 1, 2], [4, 2, 1, 2]];
@@ -321,7 +322,9 @@ class AlphaNetwork extends Component {
 
     constructor(props) {
         super(props);
-
+        this.state = {
+            webSocket:WebSocketForNetwork.createSocket()
+        }
         this.saveRef = ref => { this.refDom = ref };
     }
 
