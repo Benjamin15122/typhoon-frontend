@@ -85,6 +85,7 @@ const DataClean = (services) => {
                 label: item.data.app,
                 name: item.data.app,
                 shape: 'background-animate',
+                recover: 'background-animate',
                 color: '#40a9ff',
                 size: 25,
                 labelCfg: {
@@ -102,6 +103,7 @@ const DataClean = (services) => {
                 label: item.data.service,
                 name: item.data.service,
                 shape: 'inner-animate',
+                recover: 'inner-animate',
                 img: service,
                 labelCfg: {
                     position: 'top',
@@ -115,6 +117,7 @@ const DataClean = (services) => {
                 label: item.data.workload,
                 name: item.data.workload,
                 shape: 'image',
+                recover: 'image',
                 size: [22,22],
                 img: application,
                 labelCfg: {
@@ -125,7 +128,7 @@ const DataClean = (services) => {
         }
     })
     //获取所有frontend-version节点id
-    debugger
+    
     const dirtyEdges = serviceGraph.edges.map((item) => {
         if(item.data.source===fsid){
             fvid.push(item.data.target)
@@ -136,7 +139,7 @@ const DataClean = (services) => {
             lineWidth: 1
         }
     })
-    debugger
+    
     //删除unknown节点连接的边，获取target节点id
     var neatEdges = dirtyEdges.filter((item)=>{
         if(item.source===nkid){
@@ -145,7 +148,7 @@ const DataClean = (services) => {
         }
         return true
     })
-    debugger
+    
     fvid.forEach((item)=>{
         cid.forEach((citem)=>{
             neatEdges.push({
@@ -192,7 +195,7 @@ export default {
     },
     reducers: {
         update(state, { payload }) {
-            debugger
+            
             return {
                 data: payload
             }
@@ -205,8 +208,8 @@ export default {
             headers.set('Authorization', 'Basic ' + btoa(authString))
             while (true) {
                 const response = yield call(request, {
-                    url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
-                    // url: '/mockdata',
+                    // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
+                    url: '/mockdata',
                     options: {
                         headers: headers
                     }

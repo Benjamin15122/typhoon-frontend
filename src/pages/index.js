@@ -12,7 +12,8 @@ class App extends React.Component {
   render() {
 
     /* 地图控件 */
-    const map = <TyphoonMap pause={this.state.pause} speed={this.state.speed} />
+    // const map = <TyphoonMap pause={this.state.pause} speed={this.state.speed} />
+    const map = <div></div>
 
     /* 底部抽屉 */
     const bottomDrawer = (

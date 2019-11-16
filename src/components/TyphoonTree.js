@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import CustomButton from './CustomButton'
 import Steps from './Steps'
 import styles from './stylesheets/TyphoonTree.css'
-import AlphaNetwork from '../pages/alpha'
+import Network from '../pages/beta'
 
 const { TreeNode } = Tree;
 
@@ -169,7 +169,7 @@ class TyphoonTree extends Component {
         </div>
 
         <div className={styles.middleDiv}>
-          <AlphaNetwork />
+          <Network />
         </div>
 
         <div className={styles.rightDiv}>
