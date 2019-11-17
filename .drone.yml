@@ -19,8 +19,8 @@ steps:
     image: registry.njuics.cn/drone/kubectl
     commands:
       - rm -rf /root/.kube && cp -r .kube /root
-      # - sed -ie "s/VERSION/${DRONE_COMMIT:0:8}/g" deploy/demo.yaml
+      - sed -ie "s/VERSION/${DRONE_COMMIT:0:8}/g" deploy/demo.yaml
       # - cat deploy/demo.yaml
-      # - kubectl apply -f deploy/demo.yaml -n typhoon
-      # - kubectl apply -f deploy/DestinationRule.yaml -n typhoon
+      - kubectl apply -f deploy/demo.yaml -n typhoon
+      - kubectl apply -f deploy/DestinationRule.yaml -n typhoon
       - kubectl apply -f deploy/VirtualService.yaml -n typhoon
