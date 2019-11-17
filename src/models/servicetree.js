@@ -178,6 +178,14 @@ export default {
           commitnumber: response.number
         }
       })
+      let i = 0
+      while(i<7){
+        yield put({
+          type: 'getBranch',
+          payload: payload.id
+        })
+        yield call(delay, 10000)
+      }
     },
 
     *getBranchNodeStatus({ payload }, { call, put }) {

@@ -3,8 +3,8 @@ import service from '../assets/service.svg'
 import application from '../assets/application.svg'
 import request from '../utils/request'
 import status from '../utils/status'
-const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
-// const KIALIURL = '/mockdata'
+// const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
+const KIALIURL = '/mockdata'
 
 const DataFakeUpdate = (elements, serviceName) => {
     let nodes = elements.nodes
@@ -104,10 +104,8 @@ const Equals = (x, y) => {
 const DataClean = (services) => {
     const edges = services.elements.edges
     const dirtyNodes = services.elements.nodes
-    var fsid//frontend service id
-    var fvid = []//frontend versions id
+    var fvid//frontend versions id
     var nkid//unknown id
-    var cid = []//controllers id
     const nodes = dirtyNodes.filter((item) => {
         if(item.data.isUnused){
             return false
@@ -140,9 +138,6 @@ const DataClean = (services) => {
             }
         }
         else if (item.data.nodeType === 'service') {
-            if(item.data.service==='frontend'){
-                fsid = item.data.id
-            }
             return {
                 ...item.data,
                 label: item.data.service,
@@ -159,6 +154,9 @@ const DataClean = (services) => {
             }
         }
         else if (item.data.nodeType === 'app') {
+            if(item.data.app==="frontend"){
+                fvid = item.data.id
+            }
             return {
                 ...item.data,
                 label: item.data.workload,
@@ -173,37 +171,44 @@ const DataClean = (services) => {
                 }
             }
         }
+        else if(item.data.nodeType === 'unknown') {
+            debugger
+            return {
+                ...item.data,
+                nodeType: "app",
+                namespace: "typhoon",
+                workload: "frontend-v1",
+                app: "frontend",
+                version: "v1",
+                label: "frontend-running",
+                name: "frontend-running",
+                shape: 'image',
+                recover: 'image',
+                size: [22,22],
+                img: application,
+                labelCfg: {
+                    position: 'top',
+                    offset: 10
+                }
+            }
+        }
     })
     //获取所有frontend-version节点id
     
-    const dirtyEdges = serviceGraph.edges.map((item) => {
-        if(item.data.source===fsid){
-            fvid.push(item.data.target)
+    const neatEdges = serviceGraph.edges.map((item) => {
+        if (item.data.source===nkid){
+            return {
+                ...item.data,
+                source: fvid,
+                shape: 'circle-running',
+                lineWidth: 0.5
+            }
         }
         return {
             ...item.data,
             shape: 'circle-running',
-            lineWidth: 1
+            lineWidth: 0.5
         }
-    })
-    
-    //删除unknown节点连接的边，获取target节点id
-    var neatEdges = dirtyEdges.filter((item)=>{
-        if(item.source===nkid){
-            cid.push(item.target)
-            return false
-        }
-        return true
-    })
-    
-    fvid.forEach((item)=>{
-        cid.forEach((citem)=>{
-            neatEdges.push({
-                id: item+citem,
-                source: item,
-                target: citem
-            })
-        })
     })
 
     return {

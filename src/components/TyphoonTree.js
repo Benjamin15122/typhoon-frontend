@@ -25,7 +25,6 @@ class TyphoonTree extends Component {
     }
   }
 
-
   onTreeNodeSelect = (keys, e) => {
     this.props.dispatch({
       type: "servicetree/getBranch", payload: keys
