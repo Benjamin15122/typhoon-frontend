@@ -95,7 +95,7 @@ export default {
   },
   effects: {
     *fetchData({ url, index }, { call, put }) {
-      const { typhoon, cityList } = yield call(request, `${url}?index=${index}`)
+      const { typhoon, cityList } = yield call(request, { url: url+'?index='+index})
 
       const typhoonData = {
         position: {

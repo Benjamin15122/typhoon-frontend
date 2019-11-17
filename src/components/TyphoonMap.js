@@ -138,13 +138,14 @@ class TyphoonMap extends React.Component {
       this.props.dispatch({
         type: "typhoon/fetchData",
         url: "/wind",
-        index: Math.floor((this.index++) % 80)
+        index: Math.floor((this.index) % 80)
       })
 
       this.props.dispatch({
-        type: "typhoon/fakeData",
+        type: "typhoon/fetchData",
         // url: "http://114.212.189.141:32006/rain"
-        url: "/rain"
+        url: "/rain",
+        index: Math.floor((this.index++) % 80)
       })
     }
 
