@@ -63,7 +63,7 @@ export default {
           dataRef = cityWeather.weatherData.find(weather => weather.property === data.type)
 
           dataRef.dataPoints = dataRef.dataPoints.concat({
-            label: time.getHours()+":"+time.getMinutes()+":"+time.getSeconds(),
+            label: time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds(),
             y: data.value + Math.random() * 5
           })
 
@@ -94,8 +94,8 @@ export default {
     }
   },
   effects: {
-    *fetchData({ url }, { call, put }) {
-      const { typhoon, cityList } = yield call(request, { url: url })
+    *fetchData({ url, index }, { call, put }) {
+      const { typhoon, cityList } = yield call(request, `${url}?index=${index}`)
 
       const typhoonData = {
         position: {
