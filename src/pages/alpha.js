@@ -189,74 +189,75 @@ class AlphaNetwork extends Component {
     }
 
     componentDidMount() {
-        const {clientHeight,clientWidth} = this.refs.container
-        var graph = new G6.Graph({
+        const data = this.props.data
+        const { clientHeight, clientWidth } = this.refs.container
+        var graph = new G6.TreeGraph({
             container: 'mountNode',
             width: clientWidth,
             height: clientHeight,
-            autoPaint: false,
+            pixelRatio: 2,
             modes: {
-                default: ['drag-canvas', {
-                    type: 'tooltip',
-                    formatText: function formatText(model) {
-                        return '<p>'+model.name+'</p>';
+                default: [{
+                    type: 'collapse-expand',
+                    onChange: function onChange(item, collapsed) {
+                        var data = item.get('model').data;
+                        data.collapsed = collapsed;
+                        return true;
                     }
-                }]
+                }, 'drag-canvas', 'zoom-canvas']
             },
             defaultNode: {
-                size: [25, 25],
-                color: 'steelblue'
+                size: 16,
+                anchorPoints: [[0, 0.5], [1, 0.5]],
+                style: {
+                    fill: '#40a9ff',
+                    stroke: '#096dd9'
+                }
             },
             defaultEdge: {
-                size: 1,
-                color: "rgb(76,122,187)",
+                shape: 'cubic-horizontal',
+                style: {
+                    stroke: '#A3B1BF'
+                }
             },
-            nodeStyle: {
-                default: {
-                    lineWidth: 2,
-                    fill: '#fff'
+            layout: {
+                type: 'compactBox',
+                direction: 'LR',
+                getId: function getId(d) {
+                    return d.id;
+                },
+                getHeight: function getHeight() {
+                    return 16;
+                },
+                getWidth: function getWidth() {
+                    return 16;
+                },
+                getVGap: function getVGap() {
+                    return 10;
+                },
+                getHGap: function getHGap() {
+                    return 100;
                 }
             }
         });
-        var data = this.props.data
 
-        var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
-            return d.id;
-        }).strength(0.01)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
-
-        function refreshPosition(e) {
-            e.item.get('model').x = e.x;
-            e.item.get('model').y = e.y;
-            graph.refreshPositions();
-        }
-
-        graph.on('node:dragstart', function (e) {
-            simulation.alphaTarget(0.3).restart();
-            refreshPosition(e);
-        });
-        graph.on('node:drag', function (e) {
-            refreshPosition(e);
-        });
-        graph.on('node:dragend', function (e) {
-            simulation.alphaTarget(0);
-            refreshPosition(e);
+        graph.node(function (node) {
+            return {
+                size: 26,
+                style: {
+                    fill: '#40a9ff',
+                    stroke: '#096dd9'
+                },
+                label: node.id,
+                labelCfg: {
+                    position: node.children && node.children.length > 0 ? 'left' : 'right'
+                }
+            };
         });
 
         graph.data(data);
-        simulation.nodes(data.nodes).on("tick", ticked);
-        simulation.force("link").links(data.edges);
-
         graph.render();
-
-        function ticked() {
-            if (!graph.get('data')) {
-                graph.data(data);
-                graph.render();
-            } else {
-                graph.refreshPositions();
-            }
-            graph.paint();
-        }
+        graph.fitView();
         this.graph = graph
     }
 
@@ -264,22 +265,6 @@ class AlphaNetwork extends Component {
     componentDidUpdate() {
         var data = this.props.data
         var graph = this.graph
-        const {clientWidth, clientHeight} = this.refDom;
-        console.log(clientHeight)
-        var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
-            return d.id;
-        }).strength(0.01)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
-        simulation.nodes(data.nodes).on("tick", ticked);
-        simulation.force("link").links(data.edges);
-        function ticked() {
-            if (!graph.get('data')) {
-                graph.data(data);
-                graph.render();
-            } else {
-                graph.refreshPositions();
-            }
-            graph.paint();
-        }
         // graph.clear()
         // graph.read(data)
         graph.read(data)
@@ -290,8 +275,8 @@ class AlphaNetwork extends Component {
 
     render() {
         return <div className={styles.container} ref="container">
-                <div id="mountNode" ref={this.saveRef}/>
-            </div>
+            <div id="mountNode" ref={this.saveRef} />
+        </div>
     }
 }
 

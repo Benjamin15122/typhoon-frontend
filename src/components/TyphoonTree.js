@@ -5,6 +5,7 @@ import CustomButton from './CustomButton'
 import Steps from './Steps'
 import styles from './stylesheets/TyphoonTree.css'
 import Network from '../pages/beta'
+// import Network from '../pages/alpha'
 
 const { TreeNode } = Tree;
 
