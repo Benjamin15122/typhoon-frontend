@@ -14,7 +14,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: frontend-v2
+  name: frontend-VERSION
 spec:
   replicas: 1
   template:
@@ -24,7 +24,7 @@ spec:
         version: v2
     spec:
       nodeSelector:
-        internet: "true"
+        nodeId: "n134"
       containers:
         - name: frontend
           image: registry.njuics.cn/wdongyu/frontend:VERSION
