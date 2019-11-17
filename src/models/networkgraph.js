@@ -3,6 +3,9 @@ import service from '../assets/service.svg'
 import application from '../assets/application.svg'
 import request from '../utils/request'
 import status from '../utils/status'
+const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
+// const KIALIURL = '/mockdata'
+
 const DataFakeUpdate = (elements, serviceName) => {
     let nodes = elements.nodes
     let edges = elements.edges
@@ -251,8 +254,7 @@ export default {
             let headers = new Headers()
             headers.set('Authorization', 'Basic ' + btoa(authString))
             let response = yield call(request, {
-                // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
-                url: '/mockdata',
+                url: KIALIURL,
                 options: {
                     headers: headers
                 }
@@ -266,8 +268,7 @@ export default {
             yield put({ type: 'update', payload: finishedElements })
             yield call(delay, 2000)
             response = yield call(request, {
-                // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
-                url: '/mockdata',
+                url: KIALIURL,
                 options: {
                     headers: headers
                 }
@@ -282,12 +283,12 @@ export default {
             headers.set('Authorization', 'Basic ' + btoa(authString))
             while (true) {
                 const response = yield call(request, {
-                    // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
-                    url: '/mockdata',
+                    url: KIALIURL,
                     options: {
                         headers: headers
                     }
                 })
+                // console.log(response)
                 const pureRes = Erase(response)
                 const noUpdate = Equals(pureRes,lastElements)
                 if(noUpdate===true){
