@@ -35,6 +35,10 @@ class TyphoonTree extends Component {
     console.log(selectedId)
     console.log(selectedName)
     this.props.dispatch({
+      type: 'networkgraph/fakeUpdateAnimation',
+      payload: 'productpage'
+    })
+    this.props.dispatch({
       type: "servicetree/executeDrone", payload: {
         id: selectedId,
         name: selectedName

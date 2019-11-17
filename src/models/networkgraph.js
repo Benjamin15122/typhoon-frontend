@@ -2,6 +2,48 @@ import { delay } from 'dva/saga';
 import service from '../assets/service.svg'
 import application from '../assets/application.svg'
 import request from '../utils/request'
+import status from '../utils/status'
+const DataFakeUpdate = (elements, serviceName) => {
+    let nodes = elements.nodes
+    let edges = elements.edges
+    // find node to update
+    let uid = ""
+    nodes.forEach((item)=>{
+        if(item.name===serviceName){
+            item.shape = status.UPDATING
+            uid = item.id
+        }
+    })
+    let aids = []
+    edges.forEach((item)=>{
+        if(item.target===uid){
+            aids.push(item.source)
+        }
+    })
+    nodes.forEach((item)=>{
+        if(aids.includes(item.id)){
+            item.shape = status.AFFECTED
+        }
+    })
+    return {
+        nodes,
+        edges
+    }
+}
+
+const DataFakeFinish = (elements) => {
+    let nodes = elements.nodes
+    nodes.forEach((item)=>{
+        if(item.shape!==item.recover){
+            item.shape = status.FINISHED
+        }
+    })
+    return {
+        nodes: nodes,
+        edges: elements.edges
+    }
+}
+
 const Erase = (services) =>{
     const nodes = services.elements.nodes.map((item)=>{
         return {
@@ -104,6 +146,8 @@ const DataClean = (services) => {
                 name: item.data.service,
                 shape: 'inner-animate',
                 recover: 'inner-animate',
+                updating: false,
+                affected: false,
                 img: service,
                 labelCfg: {
                     position: 'top',
@@ -195,13 +239,43 @@ export default {
     },
     reducers: {
         update(state, { payload }) {
-            
             return {
                 data: payload
             }
-        }
+        },
     },
     effects: {
+        *fakeUpdateAnimation({payload}, {call, put}){
+            const serviceName = payload
+            let authString = 'admin:admin'
+            let headers = new Headers()
+            headers.set('Authorization', 'Basic ' + btoa(authString))
+            let response = yield call(request, {
+                // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
+                url: '/mockdata',
+                options: {
+                    headers: headers
+                }
+            })
+            let pureRes = Erase(response)
+            let elements = DataClean(pureRes)
+            const updatingElements = DataFakeUpdate(elements, serviceName)
+            yield put({ type: 'update', payload: updatingElements })
+            yield call(delay, 5000)
+            const finishedElements = DataFakeFinish(updatingElements)
+            yield put({ type: 'update', payload: finishedElements })
+            yield call(delay, 2000)
+            response = yield call(request, {
+                // url: '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre',
+                url: '/mockdata',
+                options: {
+                    headers: headers
+                }
+            })
+            pureRes = Erase(response)
+            elements = DataClean(pureRes)
+            yield put({ type: 'update', payload: elements })
+        },
         *fetchGraphData(_, { call, put }) {
             let authString = 'admin:admin'
             let headers = new Headers()
