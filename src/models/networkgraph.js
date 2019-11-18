@@ -15,14 +15,18 @@ const DataFakeUpdate = (elements, serviceName) => {
         if(item.name===serviceName){
             item.shape = status.UPDATING
             uid = item.id
+            debugger
         }
     })
+    console.log(uid)
     let aids = []
     edges.forEach((item)=>{
         if(item.target===uid){
             aids.push(item.source)
         }
     })
+    console.log(aids)
+    debugger
     nodes.forEach((item)=>{
         if(aids.includes(item.id)){
             item.shape = status.AFFECTED

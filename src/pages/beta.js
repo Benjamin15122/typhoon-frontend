@@ -389,7 +389,7 @@ G6.registerEdge('circle-running', {
 
 
 
-class AlphaNetwork extends Component {
+class BetaNetwork extends Component {
     graph = {}
     data = {}
 
@@ -465,14 +465,14 @@ class AlphaNetwork extends Component {
         })
 
         graph.on('node:dragstart', function (e) {
-            simulation.alphaTarget(0.3).restart();
+            simulation.BetaTarget(0.3).restart();
             refreshPosition(e);
         });
         graph.on('node:drag', function (e) {
             refreshPosition(e);
         });
         graph.on('node:dragend', function (e) {
-            simulation.alphaTarget(0);
+            simulation.BetaTarget(0);
             refreshPosition(e);
         });
 
@@ -531,4 +531,4 @@ export default connect((state) => {
     return {
         data: state.networkgraph.data
     }
-})(AlphaNetwork);
+})(BetaNetwork);
