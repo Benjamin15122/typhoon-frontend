@@ -2,6 +2,7 @@ import request from '../utils/request'
 // import { effects } from 'redux-saga';
 import { delay } from 'dva/saga';
 import dateformat from "dateformat";
+import { notification } from 'antd';
 
 
 var dateFormat = require('dateformat');
@@ -23,7 +24,9 @@ export default {
   state: {
     branchNodeList: [],
     serviceList: [],
-    clickedBranchNodeInfo: ''
+    clickedBranchNodeInfo: '',
+    prevNodeStatus: '',
+    count: 0,
   },
   reducers: {
     updateServiceList(state, { payload }) {
@@ -62,58 +65,89 @@ export default {
     },
 
     updateBranchNodeStatus(state, { payload }) {
+      let prevNodeStatus = state.prevNodeStatus
+      let count = state.count
+      let branchNodeList = state.branchNodeList.map((branchNode) => {
+        if (branchNode.id === payload.id) {
+          branchNode = {
+            ...branchNode,
+            status: payload.status,
+            detailedstatus: payload.detailedstatus
+          }
+          if (branchNode.status === 'running') {
+            if(prevNodeStatus!==branchNode.status||count%10===0){
+              notification['warning']({
+                message: 'Rebuilding processing ',
+                description:
+                  'service: '+branchNode.id+'\n'+'version: '+branchNode.name,
+              });
+              prevNodeStatus = branchNode.status
+              count = 0
+            }else{
+              count = count+1
+            }
+            branchNode = {
+              ...branchNode,
+              iconType: "icon-loading",
+              badgestatus: "processing"
+            }
+          }
+          else if (branchNode.status === 'failure') {
+            if(prevNodeStatus!==branchNode.status){
+              notification['error']({
+                message: 'Rebuilding failed ',
+                description:
+                  'service: '+branchNode.id+'\n'+'version: '+branchNode.name,
+              });
+              prevNodeStatus = branchNode.status
+            }
+            branchNode = {
+              ...branchNode,
+              iconType: "close-circle",
+              badgestatus: "error"
+            }
+          }
+          else if (branchNode.status === 'success') {
+            if(prevNodeStatus!==branchNode.status){
+              notification['success']({
+                message: 'Rebuilding succeeded ',
+                description:
+                  'service: '+branchNode.id+'\n'+'version: '+branchNode.name,
+              });
+              prevNodeStatus = branchNode.status
+            }
+            branchNode = {
+              ...branchNode,
+              // iconType: "check-circle",
+              iconType: "icon-success",
+              badgestatus: "success"
+            }
+          }
+        }
+        if(payload.detailedstatus.clone === "running"){
+          branchNode = {
+            ...branchNode,
+            detailsnum: 1,
+          }
+        }
+        if(payload.detailedstatus.publish === "running"){
+          branchNode = {
+            ...branchNode,
+            detailsnum: 2,
+          }
+        }
+        if(payload.detailedstatus.deploy === "running"){
+          branchNode = {
+            ...branchNode,
+            detailsnum: 3,
+          }
+        }
+        return branchNode
+      })
       return {
         ...state,
-        branchNodeList: state.branchNodeList.map((branchNode) => {
-          if (branchNode.id === payload.id) {
-            branchNode = {
-              ...branchNode,
-              status: payload.status,
-              detailedstatus: payload.detailedstatus
-            }
-            if (branchNode.status === 'running') {
-              branchNode = {
-                ...branchNode,
-                iconType: "icon-loading",
-                badgestatus: "processing"
-              }
-            }
-            else if (branchNode.status === 'failure') {
-              branchNode = {
-                ...branchNode,
-                iconType: "close-circle",
-                badgestatus: "error"
-              }
-            }
-            else if (branchNode.status === 'success') {
-              branchNode = {
-                ...branchNode,
-                // iconType: "check-circle",
-                iconType: "icon-success",
-                badgestatus: "success"
-              }
-            }
-          }
-          if(payload.detailedstatus.clone === "running"){
-            branchNode = {
-              ...branchNode,
-              detailsnum: 1,
-            }
-          }
-          if(payload.detailedstatus.publish === "running"){
-            branchNode = {
-              ...branchNode,
-              detailsnum: 2,
-            }
-          }
-          if(payload.detailedstatus.deploy === "running"){
-            branchNode = {
-              ...branchNode,
-              detailsnum: 3,
-            }
-          }
-          return branchNode
-        })
+        branchNodeList: branchNodeList,
+        prevNodeStatus: prevNodeStatus
       }
     }
 

@@ -396,9 +396,22 @@ class BetaNetwork extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            webSocket:WebSocketForNetwork.createSocket()
+            webSocket:WebSocketForNetwork.createSocket(this.updateService)
         }
         this.saveRef = ref => { this.refDom = ref };
+    }
+
+    updateService(e) {
+        console.log(e)
+        if(e==='Update start ... '){
+            this.props.dispatch({
+                type: "networkgraph/fakeUpdateAnimation"
+            })
+        }else if(e==='Update end ...'){
+            this.props.dispatch({
+                type: "networkgraph/fakeFinishAnimation"
+            })
+        }
     }
 
     componentWillMount() {

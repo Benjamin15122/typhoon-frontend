@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Tree, Timeline, Badge, Descriptions } from 'antd';
+import { Icon, Tree, Timeline, Badge, Descriptions, notification } from 'antd';
 import { connect } from 'dva';
 import CustomButton from './CustomButton'
 import Steps from './Steps'
@@ -39,16 +39,21 @@ class TyphoonTree extends Component {
   onBranchNodeSelect = (selectedName, selectedId) => {
     console.log(selectedId)
     console.log(selectedName)
+    notification['info']({
+      message: 'Rebuilding started ',
+      description:
+        'service: '+selectedId+'\n'+'version: '+selectedName,
+    });
     this.props.dispatch({
-      type: 'networkgraph/fakeUpdateAnimation',
+      type: 'networkgraph/updateService',
       payload: selectedId
     })
-    // this.props.dispatch({
-    //   type: "servicetree/executeDrone", payload: {
-    //     id: selectedId,
-    //     name: selectedName
-    //   }
-    // })
+    this.props.dispatch({
+      type: "servicetree/executeDrone", payload: {
+        id: selectedId,
+        name: selectedName
+      }
+    })
   }
 
   onBranchNodeStatus = (keys) => {

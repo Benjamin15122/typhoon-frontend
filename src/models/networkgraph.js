@@ -8,31 +8,29 @@ const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType
 
 const DataFakeUpdate = (elements, dirtyServiceName) => {
     const dirtyArray = dirtyServiceName.split('-')
-    let serviceName = dirtyArray.reduce((accumulator, current, index)=>{
-        if(index===0||current==='microservices') return accumulator
-        else if(accumulator==='') return current
-        else return accumulator+'-'+current
-    },'')
+    let serviceName = dirtyArray.reduce((accumulator, current, index) => {
+        if (index === 0 || current === 'microservices') return accumulator
+        else if (accumulator === '') return current
+        else return accumulator + '-' + current
+    }, '')
     let nodes = elements.nodes
     let edges = elements.edges
     // find node to update
     let uid = ""
-    nodes.forEach((item)=>{
-        if(item.name===serviceName){
+    nodes.forEach((item) => {
+        if (item.name === serviceName) {
             item.shape = status.UPDATING
             uid = item.id
         }
     })
     let aids = []
-    edges.forEach((item)=>{
-        if(item.target===uid){
+    edges.forEach((item) => {
+        if (item.target === uid) {
             aids.push(item.source)
         }
     })
-    console.log(aids)
-    debugger
-    nodes.forEach((item)=>{
-        if(aids.includes(item.id)){
+    nodes.forEach((item) => {
+        if (aids.includes(item.id)) {
             item.shape = status.AFFECTED
         }
     })
@@ -44,8 +42,8 @@ const DataFakeUpdate = (elements, dirtyServiceName) => {
 
 const DataFakeFinish = (elements) => {
     let nodes = elements.nodes
-    nodes.forEach((item)=>{
-        if(item.shape!==item.recover){
+    nodes.forEach((item) => {
+        if (item.shape !== item.recover) {
             item.shape = status.FINISHED
         }
     })
@@ -55,26 +53,26 @@ const DataFakeFinish = (elements) => {
     }
 }
 
-const Erase = (services) =>{
-    const nodes = services.elements.nodes.map((item)=>{
+const Erase = (services) => {
+    const nodes = services.elements.nodes.map((item) => {
         return {
             data: {
-              id: item.data.id,
-              isRoot: item.data.isRoot,
-              nodeType: item.data.nodeType,
-              isUnused: item.data.isUnused,
-              app: item.data.app,
-              service: item.data.service,
-              workload: item.data.workload
+                id: item.data.id,
+                isRoot: item.data.isRoot,
+                nodeType: item.data.nodeType,
+                isUnused: item.data.isUnused,
+                app: item.data.app,
+                service: item.data.service,
+                workload: item.data.workload
             }
         }
     })
-    const edges = services.elements.edges.map((item)=>{
+    const edges = services.elements.edges.map((item) => {
         return {
             data: {
-              id: item.data.id,
-              source: item.data.source,
-              target: item.data.target
+                id: item.data.id,
+                source: item.data.source,
+                target: item.data.target
             }
         }
     })
@@ -113,23 +111,33 @@ const DataClean = (services) => {
     const edges = services.elements.edges
     const dirtyNodes = services.elements.nodes
     var fvid//frontend versions id
-    var rid//windcontroller id
-    var wid//raincontroller id
+    var rid//raincontroller id
+    var wid//windcontroller id
+    var rvid//raincontroller app id
+    var wvid//windcontroller app id
     var nkid
     const nodes = dirtyNodes.filter((item) => {
-        if(item.data.service==='raincontroller'){
+        if (item.data.service === 'raincontroller') {
             rid = item.data.id
             return true
         }
-        if(item.data.service==='windcontroller'){
+        if (item.data.service === 'windcontroller') {
             wid = item.data.id
             return true
         }
-        if(item.data.isUnused){
+        if (item.data.app === 'raincontroller') {
+            rvid = item.data.id
+            return true
+        }
+        if (item.data.app === 'windcontroller') {
+            wvid = item.data.id
+            return true
+        }
+        if (item.data.isUnused) {
             return false
         }
         //获取unknown节点id
-        if(item.data.service==='PassthroughCluster'){
+        if (item.data.service === 'PassthroughCluster') {
             nkid = item.data.id
             return false
         }
@@ -140,7 +148,7 @@ const DataClean = (services) => {
         edges: edges
     }
     const neatNodes = serviceGraph.nodes.map((item) => {
-        if (item.data.isRoot === true&&item.data.app!=="windcontroller"&&item.data.app!=="raincontroller") {
+        if (item.data.isRoot === true && item.data.app !== "windcontroller" && item.data.app !== "raincontroller") {
             return {
                 ...item.data,
                 label: item.data.app,
@@ -170,7 +178,7 @@ const DataClean = (services) => {
             }
         }
         else if (item.data.nodeType === 'app') {
-            if(item.data.app==="frontend"){
+            if (item.data.app === "frontend") {
                 fvid = item.data.id
             }
             return {
@@ -179,7 +187,7 @@ const DataClean = (services) => {
                 name: item.data.workload,
                 shape: 'inner-animate',
                 recover: 'inner-animate',
-                size: [15,15],
+                size: [15, 15],
                 img: service,
                 labelCfg: {
                     position: 'top',
@@ -190,7 +198,7 @@ const DataClean = (services) => {
     })
     //获取所有frontend-version节点id
     let neatEdges = serviceGraph.edges.map((item) => {
-        if(item.source===nkid){
+        if (item.source === nkid) {
             return {
                 ...item.data,
                 source: fvid,
@@ -205,31 +213,53 @@ const DataClean = (services) => {
         }
     })
 
-    neatEdges = neatEdges.filter((item)=>{
-        if(item.target===nkid){
+    neatEdges = neatEdges.filter((item) => {
+        if (item.target === nkid) {
             return false
         }
         return true
     })
 
-    console.log(nkid, wid, rid)
-    debugger
+    if(fvid!==undefined){
+        if(rid!==undefined){
+            neatEdges.push({
+                id: fvid + rid,
+                source: fvid,
+                target: rid,
+                shape: 'circle-running',
+                lineWidth: 1
+            })
+        }
+        if(wid!==undefined){
+            neatEdges.push({
+                id: fvid + wid,
+                source: fvid,
+                target: wid,
+                shape: 'circle-running',
+                lineWidth: 1
+            })
+        }
+    }
 
-    neatEdges.push({
-        id: fvid+rid,
-        source: fvid,
-        target: rid,
-        shape: 'circle-running',
-        lineWidth: 1
-    })
+    if(wid!==undefined&&wvid!==undefined){
+        neatEdges.push({
+            id: wvid + wid,
+            source: wid,
+            target: wvid,
+            shape: 'circle-running',
+            lineWidth: 1
+        })
+    }
 
-    neatEdges.push({
-        id: fvid+wid,
-        source: fvid,
-        target: wid,
-        shape: 'circle-running',
-        lineWidth: 1
-    })
+    if(rvid!==undefined&&wvid!==undefined){
+        neatEdges.push({
+            id: rvid + rid,
+            source: rid,
+            target: rvid,
+            shape: 'circle-running',
+            lineWidth: 1
+        })
+    }
 
     return {
         nodes: neatNodes,
@@ -261,42 +291,48 @@ export default {
                 }
             }],
             edges: []
-        }
+        },
+        service: 'typhoon-microservices-typhoon'
     },
     reducers: {
         update(state, { payload }) {
             return {
+                ...state,
                 data: payload
             }
         },
+        updateService(state, {payload}){
+            return {
+                ...state,
+                service: payload
+            }
+        }
     },
     effects: {
-        *fakeUpdateAnimation({payload}, {call, put}){
-            const serviceName = payload
-            let authString = 'admin:admin'
-            let headers = new Headers()
-            headers.set('Authorization', 'Basic ' + btoa(authString))
-            let response = yield call(request, {
-                url: KIALIURL,
-                options: {
-                    headers: headers
-                }
-            })
-            let pureRes = Erase(response)
-            let elements = DataClean(pureRes)
+        *fakeUpdateAnimation(_, { put, select }) {
+            const serviceName = yield select( state=>state.service)
+            let elements = yield select( state => state.data)
             const updatingElements = DataFakeUpdate(elements, serviceName)
             yield put({ type: 'update', payload: updatingElements })
+        },
+        *fakeFinishAnimation(_,{call,put,select}){
+            const serviceName = yield select( state=>state.service)
+            let elements = yield select( state => state.data)
+            const updatingElements = DataFakeUpdate(elements, serviceName)
             yield call(delay, 5000)
             const finishedElements = DataFakeFinish(updatingElements)
             yield put({ type: 'update', payload: finishedElements })
             yield call(delay, 2000)
-            response = yield call(request, {
+            let authString = 'admin:admin'
+            let headers = new Headers()
+            headers.set('Authorization', 'Basic ' + btoa(authString))
+            const response = yield call(request, {
                 url: KIALIURL,
                 options: {
                     headers: headers
                 }
             })
-            pureRes = Erase(response)
+            const pureRes = Erase(response)
             elements = DataClean(pureRes)
             yield put({ type: 'update', payload: elements })
         },
@@ -304,8 +340,8 @@ export default {
             let authString = 'admin:admin'
             let headers = new Headers()
             headers.set('Authorization', 'Basic ' + btoa(authString))
-            while (true) {
-                yield call(delay, 10000)
+            let i = 0, j = 1
+            while (i <= 10) {
                 const response = yield call(request, {
                     url: KIALIURL,
                     options: {
@@ -315,13 +351,17 @@ export default {
                 // console.log(response)
                 var lastElements = {}
                 const pureRes = Erase(response)
-                const noUpdate = Equals(pureRes,lastElements)
-                if(noUpdate===true){
+                const noUpdate = Equals(pureRes, lastElements)
+                if (noUpdate === true) {
+                    yield call(delay, 1000)
                     continue
                 }
                 lastElements = pureRes
                 const elements = DataClean(pureRes)
+                yield call(delay, 1000*i)
                 yield put({ type: 'update', payload: elements })
+                i = i + j
+                j = j + 1
             }
         }
     }

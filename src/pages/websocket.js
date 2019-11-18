@@ -1,5 +1,5 @@
 class WebSocketForNetwork {
-    static createSocket() {
+    static createSocket(onMessage) {
         let webSocket;
         if ("WebSocket" in window) {
             let newUrl = "ws://n141:31002/websocket";
@@ -10,9 +10,7 @@ class WebSocketForNetwork {
             webSocket.onopen = () => {
                 console.log("open")
             };
-            webSocket.onmessage = (e) => {
-                console.log(e)
-            };
+            webSocket.onmessage = onMessage
             webSocket.onclose = () => {
                 console.log("close")
             };
