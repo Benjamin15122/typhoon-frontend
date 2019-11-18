@@ -8,6 +8,8 @@ import FlexibleView from '../components/FlexibleView'
 import TyphoonMap from '../components/TyphoonMap'
 import TyphoonTree from '../components/TyphoonTree'
 
+import "antd/dist/antd.css"
+
 class App extends React.Component {
   render() {
 

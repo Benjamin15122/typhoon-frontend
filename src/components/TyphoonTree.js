@@ -9,6 +9,10 @@ import Network from '../pages/beta'
 
 const { TreeNode } = Tree;
 
+const IconFont = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_1289537_wk8971gis7f.js',
+});
+
 class TyphoonTree extends Component {
   constructor(props) {
     super(props);
@@ -137,7 +141,6 @@ class TyphoonTree extends Component {
               clickId={branchNodeInfo.id}
               clickName={branchNodeInfo.name}
               buttonClicked={(e, id, name) => {
-
                 this.onBranchNodeSelect(id, name)
                 // this.props.branchNodeList.forEach((branchNode) => {
                 //   if (branchNode.id===name) {
@@ -145,23 +148,24 @@ class TyphoonTree extends Component {
                 //   }
                 // })
               }}>
-              <Icon
+              {/* <IconFont type="icon-commit1" style={{ fontSize: '20px' }}/> */}
+              {branchNodeInfo.iconType==="icon-loading"?<Icon type="loading" style={{ fontSize: '20px' }}/>:<IconFont
                 type={branchNodeInfo.iconType}
                 //theme="twoTone"
                 //twoToneColor="#52c41a"
                 style={{ fontSize: '20px' }}
-              />
+              />}
             </CustomButton>
           }
         >
           <Descriptions  title={branchNodeInfo.short_id} border size="small" column={1}>
             </Descriptions>
-            Time: {branchNodeInfo.createtime}<br />
-            Status:  <Badge status={branchNodeInfo.badgestatus} text={branchNodeInfo.status} /><br />
-            Details: <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;clone: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.clone : ""}<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;publish: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.publish : ""}<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;deploy: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.deploy : ""}
+            时间: {branchNodeInfo.createtime}<br />
+            状态:  <Badge status={branchNodeInfo.badgestatus} text={branchNodeInfo.status} /><br />
+            信息: <br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clone: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.clone : ""}<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;publish: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.publish : ""}<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deploy: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.deploy : ""}
         </Timeline.Item>
       )
     })
