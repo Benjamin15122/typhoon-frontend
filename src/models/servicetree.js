@@ -1,10 +1,23 @@
 import request from '../utils/request'
 // import { effects } from 'redux-saga';
 import { delay } from 'dva/saga';
+import dateformat from "dateformat";
 
 
-
-
+var dateFormat = require('dateformat');
+dateFormat.i18n = {
+  dayNames: [
+      'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat',
+      '星期天', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'
+  ],
+  monthNames: [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
+      '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
+  ],
+  timeNames: [
+      'a', 'p', 'am', 'pm', 'A', 'P', '上午', '下午'
+  ]
+};
 export default {
   namespace: "servicetree",
   state: {
@@ -61,7 +74,7 @@ export default {
             if (branchNode.status === 'running') {
               branchNode = {
                 ...branchNode,
-                iconType: "loading",
+                iconType: "icon-loading",
                 badgestatus: "processing"
               }
             }
@@ -75,7 +88,8 @@ export default {
             else if (branchNode.status === 'success') {
               branchNode = {
                 ...branchNode,
-                iconType: "check-circle",
+                // iconType: "check-circle",
+                iconType: "icon-success",
                 badgestatus: "success"
               }
             }
@@ -142,10 +156,11 @@ export default {
             id: value.id,
             short_id: value.short_id,
             title: value.title,
-            createtime: value.created_at,
+            //createtime: value.created_at,
+            createtime : dateFormat(value.created_at, "yyyy-mmmm-d,  HH:MM:ss"),
             parent_id: value.parent_ids,
             name: payload[0],
-            iconType: "setting",//"icon-services-copy",
+            iconType: "icon-commit",//"icon-services-copy",
             status: "pending",
             badgestatus: "default",
             detailedstatus: null,
