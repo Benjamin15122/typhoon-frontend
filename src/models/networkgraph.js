@@ -3,10 +3,16 @@ import service from '../assets/service.svg'
 import application from '../assets/application.svg'
 import request from '../utils/request'
 import status from '../utils/status'
-// const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
-const KIALIURL = '/mockdata'
+const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
+// const KIALIURL = '/mockdata'
 
-const DataFakeUpdate = (elements, serviceName) => {
+const DataFakeUpdate = (elements, dirtyServiceName) => {
+    const dirtyArray = dirtyServiceName.split('-')
+    let serviceName = dirtyArray.reduce((accumulator, current, index)=>{
+        if(index===0||current==='microservices') return accumulator
+        else if(accumulator==='') return current
+        else return accumulator+'-'+current
+    },'')
     let nodes = elements.nodes
     let edges = elements.edges
     // find node to update
@@ -15,10 +21,8 @@ const DataFakeUpdate = (elements, serviceName) => {
         if(item.name===serviceName){
             item.shape = status.UPDATING
             uid = item.id
-            debugger
         }
     })
-    console.log(uid)
     let aids = []
     edges.forEach((item)=>{
         if(item.target===uid){
