@@ -113,15 +113,23 @@ const DataClean = (services) => {
     const edges = services.elements.edges
     const dirtyNodes = services.elements.nodes
     var fvid//frontend versions id
-    var nkid//unknown id
+    var rid//windcontroller id
+    var wid//raincontroller id
+    var nkid
     const nodes = dirtyNodes.filter((item) => {
         if(item.data.isUnused){
             return false
         }
         //获取unknown节点id
-        if(item.data.nodeType==='unknown'){
+        if(item.data.service==='PassthroughCluster'){
             nkid = item.data.id
             return false
+        }
+        if(item.data.app==='raincontroller'){
+            rid = item.data.id
+        }
+        if(item.data.app==='windcontroller'){
+            wid = item.data.id
         }
         return true
     })
@@ -130,7 +138,7 @@ const DataClean = (services) => {
         edges: edges
     }
     const neatNodes = serviceGraph.nodes.map((item) => {
-        if (item.data.isRoot === true) {
+        if (item.data.isRoot === true&&item.data.app!=="windcontroller"&&item.data.app!=="raincontroller") {
             return {
                 ...item.data,
                 label: item.data.app,
@@ -177,37 +185,15 @@ const DataClean = (services) => {
                 }
             }
         }
-        else if(item.data.nodeType === 'unknown') {
-            debugger
-            return {
-                ...item.data,
-                nodeType: "app",
-                namespace: "typhoon",
-                workload: "frontend-v1",
-                app: "frontend",
-                version: "v1",
-                label: "frontend-running",
-                name: "frontend-running",
-                shape: 'image',
-                recover: 'image',
-                size: [10,10],
-                img: application,
-                labelCfg: {
-                    position: 'top',
-                    offset: 10
-                }
-            }
-        }
     })
     //获取所有frontend-version节点id
-    
-    const neatEdges = serviceGraph.edges.map((item) => {
-        if (item.data.source===nkid){
+    let neatEdges = serviceGraph.edges.map((item) => {
+        if(item.source===nkid){
             return {
                 ...item.data,
                 source: fvid,
                 shape: 'circle-running',
-                lineWidth: 1
+                linewidth: 1
             }
         }
         return {
@@ -215,6 +201,32 @@ const DataClean = (services) => {
             shape: 'circle-running',
             lineWidth: 1
         }
+    })
+
+    neatEdges = neatEdges.filter((item)=>{
+        if(item.target===nkid){
+            return false
+        }
+        return true
+    })
+
+    console.log(nkid, wid, rid)
+    debugger
+
+    neatEdges.push({
+        id: fvid+rid,
+        source: fvid,
+        target: rid,
+        shape: 'circle-running',
+        lineWidth: 1
+    })
+
+    neatEdges.push({
+        id: fvid+wid,
+        source: fvid,
+        target: wid,
+        shape: 'circle-running',
+        lineWidth: 1
     })
 
     return {

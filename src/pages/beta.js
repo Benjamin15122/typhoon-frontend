@@ -465,14 +465,14 @@ class BetaNetwork extends Component {
         })
 
         graph.on('node:dragstart', function (e) {
-            simulation.BetaTarget(0.3).restart();
+            simulation.alphaTarget(0.3).restart();
             refreshPosition(e);
         });
         graph.on('node:drag', function (e) {
             refreshPosition(e);
         });
         graph.on('node:dragend', function (e) {
-            simulation.BetaTarget(0);
+            simulation.alphaTarget(0);
             refreshPosition(e);
         });
 

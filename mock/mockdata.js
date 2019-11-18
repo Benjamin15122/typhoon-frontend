@@ -1,8 +1,24 @@
 
 const mockdata = {
-    "timestamp": 1573893117, "duration": 60,
+    "timestamp": 1574081450, "duration": 60,
     "graphType": "versionedApp", "elements": {
         "nodes": [{
+            "data": {
+                "id": "6249668dd0a91adb9e62994d36563365", "nodeType": "app",
+                "namespace": "istio-system",
+                "workload": "istio-ingressgateway",
+                "app": "istio-ingressgateway",
+                "version": "unknown",
+                "traffic": [
+                    {
+                        "protocol": "http", "rates": {
+                            "httpOut": "0.56"
+                        }
+                    }],
+                "isOutside": true,
+                "isRoot": true
+            }
+        }, {
             "data": {
                 "id": "2030c1347737df055a4af13bb033791a", "nodeType": "service",
                 "namespace": "typhoon",
@@ -12,10 +28,16 @@ const mockdata = {
                     {
                         "namespace": "typhoon", "name": "frontend"
                     }],
-                "hasVS": true,
-                "isRoot": true
+                "traffic": [{
+                    "protocol": "http", "rates": {
+                        "httpIn": "0.56",
+                        "httpOut": "0.56"
+                    }
+                }],
+                "hasVS": true
             }
         }, {
+
             "data": {
                 "id": "73dba679f824a4b2ac5444737e93c4e1", "nodeType": "app",
                 "namespace": "typhoon",
@@ -27,21 +49,27 @@ const mockdata = {
         },
         {
             "data": {
-                "id": "3314583b4b6681d773898751294e54d8", "nodeType": "app",
+                "id": "033e4d630f835472aef73096c1f85849", "nodeType": "app",
                 "namespace": "typhoon",
-                "workload": "frontend-v2",
+                "workload": "frontend-e1eaea57",
                 "app": "frontend", "version": "v2", "destServices": [
                     {
                         "namespace": "typhoon", "name": "frontend"
-                    }]
+                    }],
+                "traffic": [{
+                    "protocol": "http", "rates": {
+                        "httpIn": "0.56",
+                        "httpOut": "0.56"
+                    }
+                }]
             }
         },
         {
             "data": {
                 "id": "6fedbdc90864b88a1660aac7f78beaad", "nodeType": "service",
                 "namespace": "typhoon",
-
-                "app": "rain-changzhou", "service": "rain-changzhou", "destServices": [
+                "app": "rain-changzhou",
+                "service": "rain-changzhou", "destServices": [
                     {
                         "namespace": "typhoon", "name": "rain-changzhou"
                     }],
@@ -49,12 +77,11 @@ const mockdata = {
             }
         }, {
             "data": {
+
                 "id": "db0f1057913ab540623e225cd9154888", "nodeType": "app",
                 "namespace": "typhoon",
                 "workload": "rain-changzhou-v1",
-                "app": "rain-changzhou",
-                "version": "v1",
-                "destServices": [
+                "app": "rain-changzhou", "version": "v1", "destServices": [
                     {
                         "namespace": "typhoon", "name": "rain-changzhou"
                     }]
@@ -81,7 +108,6 @@ const mockdata = {
                 "destServices": [
                     {
                         "namespace": "typhoon", "name": "rain-hefei"
-
                     }]
             }
         },
@@ -90,10 +116,13 @@ const mockdata = {
                 "id": "50974761dced3da3ac6aed860b548e24", "nodeType": "service",
                 "namespace": "typhoon",
                 "app": "rain-maanshan",
-                "service": "rain-maanshan", "destServices": [
-                    {
-                        "namespace": "typhoon", "name": "rain-maanshan"
-                    }],
+                "service": "rain-maanshan",
+
+                "destServices": [{
+                    "namespace": "typhoon",
+                    "name": "rain-maanshan"
+                }
+                ],
                 "hasVS": true
             }
         }, {
@@ -122,11 +151,15 @@ const mockdata = {
             }
         }, {
             "data": {
-                "id": "a0ff1e33984425198a16bcdc28951497",
-
-                "nodeType": "app", "namespace": "typhoon", "workload": "rain-nanjing-v1", "app": "rain-nanjing", "version": "v1", "destServices": [
+                "id": "a0ff1e33984425198a16bcdc28951497", "nodeType": "app",
+                "namespace": "typhoon",
+                "workload": "rain-nanjing-v1",
+                "app": "rain-nanjing",
+                "version": "v1",
+                "destServices": [
                     {
                         "namespace": "typhoon", "name": "rain-nanjing"
+
                     }]
             }
         },
@@ -161,14 +194,12 @@ const mockdata = {
                 "app": "rain-suzhou",
                 "service": "rain-suzhou", "destServices": [
                     {
-                        "namespace": "typhoon",
-
-                        "name": "rain-suzhou"
-                    }
-                ],
+                        "namespace": "typhoon", "name": "rain-suzhou"
+                    }],
                 "hasVS": true
             }
         }, {
+
             "data": {
                 "id": "6a337722137812a8da7c5211d96970d4", "nodeType": "app",
                 "namespace": "typhoon",
@@ -186,35 +217,21 @@ const mockdata = {
                 "id": "ca915b5cac4b04b804de2fb765a400a9", "nodeType": "service",
                 "namespace": "typhoon",
                 "app": "raincontroller",
-                "service": "raincontroller", "destServices": [
-                    {
-                        "namespace": "typhoon", "name": "raincontroller"
-                    }],
-                "traffic": [{
-                    "protocol": "http", "rates": {
-                        "httpIn": "0.42", "httpIn5xx": "0.42", "httpOut": "0.42"
-                    }
-                }
-                ],
-                "hasVS": true
+                "service": "raincontroller", "hasVS": true, "isUnused": true
             }
-        }, {
+        },
+        {
             "data": {
                 "id": "a6e8b9c7251712237a846fcb4284760a", "nodeType": "app",
                 "namespace": "typhoon",
                 "workload": "raincontroller-v1",
-                "app": "raincontroller",
-
-                "version": "v1", "destServices": [
+                "app": "raincontroller", "version": "v1", "traffic": [
                     {
-                        "namespace": "typhoon", "name": "raincontroller"
+                        "protocol": "http", "rates": {
+                            "httpOut": "0.27"
+                        }
                     }],
-                "traffic": [{
-                    "protocol": "http", "rates": {
-                        "httpIn": "0.42", "httpIn5xx": "0.42", "httpOut": "0.42"
-                    }
-                }
-                ]
+                "isRoot": true
             }
         }, {
             "data": {
@@ -223,15 +240,16 @@ const mockdata = {
                 "app": "typhoon",
                 "service": "typhoon",
                 "destServices": [
+
                     {
                         "namespace": "typhoon", "name": "typhoon"
                     }],
                 "traffic": [{
                     "protocol": "http", "rates": {
-                        "httpIn": "0.84", "httpIn5xx": "0.84", "httpOut": "0.84"
+                        "httpIn": "0.53",
+                        "httpOut": "0.53"
                     }
-                }
-                ],
+                }],
                 "hasVS": true
             }
         }, {
@@ -243,17 +261,30 @@ const mockdata = {
                 "version": "v1",
                 "destServices": [
                     {
-
-                        "namespace": "typhoon",
-                        "name": "typhoon"
+                        "namespace": "typhoon", "name": "typhoon"
+                    }],
+                "traffic": [{
+                    "protocol": "http", "rates": {
+                        "httpIn": "0.53"
                     }
-                ], "traffic": [
-                    {
-                        "protocol": "http", "rates": {
-                            "httpIn": "0.84",
-                            "httpIn5xx": "0.84"
-                        }
-                    }]
+                }]
+            }
+        },
+        {
+            "data": {
+                "id": "a6ce04c86a5c0ddf6b9e8da485ba035b", "nodeType": "service",
+                "namespace": "typhoon",
+                "app": "websocket",
+                "service": "websocket",
+                "isUnused": true
+            }
+        }, {
+            "data": {
+
+                "id": "d665e591e48e2cc4b47d90ad97c0ce9d", "nodeType": "app",
+                "namespace": "typhoon",
+                "workload": "websocket-v1",
+                "app": "websocket", "version": "unknown", "hasMissingSC": true, "isUnused": true
             }
         },
         {
@@ -286,9 +317,9 @@ const mockdata = {
                 "namespace": "typhoon",
                 "app": "wind-hefei",
                 "service": "wind-hefei", "destServices": [
-
                     {
                         "namespace": "typhoon", "name": "wind-hefei"
+
                     }],
                 "hasVS": true
             }
@@ -328,14 +359,14 @@ const mockdata = {
                         "namespace": "typhoon", "name": "wind-maanshan"
                     }]
             }
+        },
 
-        }, {
+        {
             "data": {
                 "id": "896e4e9409e5a067776ad551c9102f5f", "nodeType": "service",
                 "namespace": "typhoon",
                 "app": "wind-nanjing",
-                "service": "wind-nanjing",
-                "destServices": [
+                "service": "wind-nanjing", "destServices": [
                     {
                         "namespace": "typhoon", "name": "wind-nanjing"
                     }],
@@ -369,9 +400,9 @@ const mockdata = {
             "data": {
                 "id": "ae59cac7c6f767bc8c1cb7842b2e440c", "nodeType": "app",
                 "namespace": "typhoon",
-                "workload": "wind-shanghai-v1",
 
-                "app": "wind-shanghai", "version": "v1", "destServices": [
+                "workload": "wind-shanghai-v1", "app": "wind-shanghai", "version": "v1",
+                "destServices": [
                     {
                         "namespace": "typhoon", "name": "wind-shanghai"
                     }]
@@ -406,19 +437,9 @@ const mockdata = {
                 "id": "a32230d965e95fe905adfbe5bfa7c39c", "nodeType": "service",
                 "namespace": "typhoon",
                 "app": "windcontroller",
-                "service": "windcontroller", "destServices": [
-                    {
-                        "namespace": "typhoon", "name": "windcontroller"
-                    }],
-
-                "traffic": [{
-                    "protocol": "http", "rates": {
-                        "httpIn": "0.42", "httpIn5xx": "0.42", "httpOut": "0.42"
-                    }
-                }
-                ],
-                "hasVS": true
+                "service": "windcontroller", "hasVS": true, "isUnused": true
             }
+
         }, {
             "data": {
                 "id": "f26ffc7dea2747259e57fb478989f358", "nodeType": "app",
@@ -426,16 +447,13 @@ const mockdata = {
                 "workload": "windcontroller-v1",
                 "app": "windcontroller",
                 "version": "v1",
-                "destServices": [
+                "traffic": [
                     {
-                        "namespace": "typhoon", "name": "windcontroller"
+                        "protocol": "http", "rates": {
+                            "httpOut": "0.27"
+                        }
                     }],
-                "traffic": [{
-                    "protocol": "http", "rates": {
-                        "httpIn": "0.42", "httpIn5xx": "0.42", "httpOut": "0.42"
-                    }
-                }
-                ]
+                "isRoot": true
             }
         }, {
             "data": {
@@ -445,27 +463,35 @@ const mockdata = {
                     {
                         "namespace": "unknown", "name": "PassthroughCluster"
                     }],
+                "traffic": [{
+                    "protocol": "http", "rates": {
+                        "httpIn": "0.56"
+                    }
+                }],
                 "isInaccessible": true
-            }
-        }, {
-
-            "data": {
-                "id": "b30b0078325bf2e1adb4d57c4c0c2665", "nodeType": "unknown",
-                "namespace": "unknown",
-                "workload": "unknown",
-                "app": "unknown",
-                "version": "unknown",
-                "traffic": [
-                    {
-                        "protocol": "http", "rates": {
-                            "httpOut": "0.84"
-                        }
-                    }],
-                "isInaccessible": true,
-                "isRoot": true
             }
         }],
         "edges": [{
+            "data": {
+                "id": "5b1f14b2f615053825b32fc7600cc0de", "source": "033e4d630f835472aef73096c1f85849", "target": "d7c639544a7810a8d021b64538e4e435", "traffic": {
+                    "protocol": "http", "rates": {
+
+                        "http": "0.56",
+                        "httpPercentReq": "100.0"
+                    },
+                    "responses": {
+                        "200": {
+                            "flags": {
+                                "-": "100.0"
+                            }, "hosts": {
+                                "n141:31380": "100.0"
+                            }
+                        }
+                    }
+                },
+                "responseTime": "44"
+            }
+        }, {
             "data": {
                 "id": "3c5cc4d98ebaf30e95a0a5b2d5abce75", "source": "07e178d53947df0378abd561efb478c8", "target": "b67bf3b6e1c21fde20b71f51703e69dc", "traffic": {
                     "protocol": "http"
@@ -481,23 +507,28 @@ const mockdata = {
         },
         {
             "data": {
-                "id": "c316d93f91b360ee8f362f4dfdf3b898", "source": "2030c1347737df055a4af13bb033791a", "target": "3314583b4b6681d773898751294e54d8", "traffic": {
-                    "protocol": "http"
-                }
-            }
-        },
-        {
-            "data": {
-                "id": "d517a315c888b9a8a8fa90bc464fbc65", "source": "206dc8b8717af482967b81f86c317ff5",
+                "id": "434d81a657e5b403ee04a60d273abd5b", "source": "2030c1347737df055a4af13bb033791a", "target": "033e4d630f835472aef73096c1f85849", "traffic": {
+                    "protocol": "http", "rates": {
+                        "http": "0.56",
+                        "httpPercentReq": "100.0"
+                    },
+                    "responses": {
+                        "200": {
+                            "flags": {
+                                "-": "100.0"
+                            },
 
-                "target": "6a337722137812a8da7c5211d96970d4", "traffic": {
-                    "protocol": "http"
-                }
+                            "hosts": {
+                                "frontend.typhoon.svc.cluster.local": "100.0"
+                            }
+                        }
+                    }
+                },
+                "responseTime": "44"
             }
-        },
-        {
+        }, {
             "data": {
-                "id": "2b0ef95a6c1e4c558e50c062d47cc03b", "source": "3314583b4b6681d773898751294e54d8", "target": "d7c639544a7810a8d021b64538e4e435", "traffic": {
+                "id": "d517a315c888b9a8a8fa90bc464fbc65", "source": "206dc8b8717af482967b81f86c317ff5", "target": "6a337722137812a8da7c5211d96970d4", "traffic": {
                     "protocol": "http"
                 }
             }
@@ -509,6 +540,26 @@ const mockdata = {
                 }
             }
         },
+        {
+            "data": {
+                "id": "17d01056b7136df6c138433bd34338e0", "source": "6249668dd0a91adb9e62994d36563365", "target": "2030c1347737df055a4af13bb033791a", "traffic": {
+                    "protocol": "http", "rates": {
+                        "http": "0.56",
+                        "httpPercentReq": "100.0"
+                    },
+                    "responses": {
+                        "200": {
+                            "flags": {
+                                "-": "100.0"
+                            }, "hosts": {
+                                "frontend.typhoon.svc.cluster.local": "100.0"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+
         {
             "data": {
                 "id": "f4a5c6186ec619548d63ded214e1a148", "source": "6fedbdc90864b88a1660aac7f78beaad", "target": "db0f1057913ab540623e225cd9154888", "traffic": {
@@ -529,30 +580,11 @@ const mockdata = {
                     "protocol": "http"
                 }
             }
-
-        }, {
-            "data": {
-                "id": "6bd0848afc1a4d667729047d9bfb0268", "source": "89e6d075842608e2dcd23697b7276c05", "target": "fd1c4fdaab1a3f48bc63a4cc6f3ea5dc", "traffic": {
-                    "protocol": "http"
-                }
-            }
         },
         {
             "data": {
-                "id": "fd8796c92ee1f7f55095e137133c9f9b", "source": "a32230d965e95fe905adfbe5bfa7c39c", "target": "f26ffc7dea2747259e57fb478989f358", "traffic": {
-                    "protocol": "http", "rates": {
-                        "http": "0.42",
-                        "http5xx": "0.42", "httpPercentErr": "100.0", "httpPercentReq": "100.0"
-                    }, "responses": {
-                        "500": {
-                            "flags": {
-                                "-": "100.0"
-                            },
-                            "hosts": {
-                                "windcontroller.typhoon.svc.cluster.local": "100.0"
-                            }
-                        }
-                    }
+                "id": "6bd0848afc1a4d667729047d9bfb0268", "source": "89e6d075842608e2dcd23697b7276c05", "target": "fd1c4fdaab1a3f48bc63a4cc6f3ea5dc", "traffic": {
+                    "protocol": "http"
                 }
             }
         },
@@ -565,10 +597,11 @@ const mockdata = {
         },
         {
             "data": {
-                "id": "5e36af2d39433923b02790875aadeb3e", "source": "a6e8b9c7251712237a846fcb4284760a", "target": "206dc8b8717af482967b81f86c317ff5", "traffic": {
+                "id": "5e36af2d39433923b02790875aadeb3e",
+
+                "source": "a6e8b9c7251712237a846fcb4284760a", "target": "206dc8b8717af482967b81f86c317ff5", "traffic": {
                     "protocol": "http"
                 }
-
             }
         },
         {
@@ -589,29 +622,29 @@ const mockdata = {
             "data": {
                 "id": "7ffb4d99394072c01d6404cf6f1cc48d", "source": "a6e8b9c7251712237a846fcb4284760a", "target": "af6ff19432f88bc230bf78e983c56081", "traffic": {
                     "protocol": "http", "rates": {
-                        "http": "0.42",
-                        "http5xx": "0.42", "httpPercentErr": "100.0", "httpPercentReq": "100.0"
-                    }, "responses": {
-                        "500": {
+                        "http": "0.27",
+                        "httpPercentReq": "100.0"
+                    },
+                    "responses": {
+                        "200": {
                             "flags": {
                                 "-": "100.0"
-                            },
-                            "hosts": {
+                            }, "hosts": {
                                 "typhoon.typhoon.svc.cluster.local": "100.0"
                             }
                         }
                     }
                 }
             }
-        },
-        {
+        }, {
             "data": {
+
                 "id": "6e25511cfe6f1b2712af65259d6b1d37", "source": "a6e8b9c7251712237a846fcb4284760a", "target": "bed6f4bd8d0e20ffb966394aaa7a9c34", "traffic": {
                     "protocol": "http"
-
                 }
             }
-        }, {
+        },
+        {
             "data": {
                 "id": "0e3f4999f56fda419c414942248cc5f5", "source": "a6e8b9c7251712237a846fcb4284760a", "target": "f8fbc3075ea3918b1a9c47b1543633dc", "traffic": {
                     "protocol": "http"
@@ -622,90 +655,33 @@ const mockdata = {
             "data": {
                 "id": "ff94dc24503dd5536c73416bf6e0ed14", "source": "af6ff19432f88bc230bf78e983c56081", "target": "9a0539036cce6825a44e9fe875789edf", "traffic": {
                     "protocol": "http", "rates": {
-                        "http": "0.84",
-                        "http5xx": "0.84", "httpPercentErr": "100.0", "httpPercentReq": "100.0"
-                    }, "responses": {
-                        "500": {
+                        "http": "0.53",
+                        "httpPercentReq": "100.0"
+                    },
+                    "responses": {
+                        "200": {
                             "flags": {
                                 "-": "100.0"
-                            },
-                            "hosts": {
+                            }, "hosts": {
                                 "typhoon.typhoon.svc.cluster.local": "100.0"
                             }
                         }
                     }
-                }
+                },
+                "responseTime": "5"
             }
-        },
-        {
-            "data": {
-                "id": "5eacebd55db22046e6bcf85ca319e050", "source": "b30b0078325bf2e1adb4d57c4c0c2665", "target": "a32230d965e95fe905adfbe5bfa7c39c", "traffic": {
-                    "protocol": "http", "rates": {
-                        "http": "0.42",
-                        "http5xx": "0.42", "httpPercentErr": "100.0", "httpPercentReq": "50.0"
-                    }, "responses": {
-                        "500": {
-                            "flags": {
-
-                                "-": "100.0"
-                            },
-                            "hosts": {
-                                "windcontroller.typhoon.svc.cluster.local": "100.0"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "data": {
-                "id": "8534a09615cf2a013902963c91a9374b", "source": "b30b0078325bf2e1adb4d57c4c0c2665", "target": "ca915b5cac4b04b804de2fb765a400a9", "traffic": {
-                    "protocol": "http", "rates": {
-                        "http": "0.42",
-                        "http5xx": "0.42", "httpPercentErr": "100.0", "httpPercentReq": "50.0"
-                    }, "responses": {
-                        "500": {
-                            "flags": {
-                                "-": "100.0"
-                            },
-                            "hosts": {
-                                "raincontroller.typhoon.svc.cluster.local": "100.0"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
+        }, {
             "data": {
                 "id": "fc2e7bce7b7b96fbc6050b52f71115b2", "source": "bed6f4bd8d0e20ffb966394aaa7a9c34", "target": "acb045f1be03f6c4371523a714b83e98", "traffic": {
                     "protocol": "http"
                 }
             }
         },
+
         {
             "data": {
                 "id": "f385fb6c279e7ac155eb06af5558efb2", "source": "c10ceeb7661110bf89efd44bd9135e46", "target": "43630fd327907187cef9ee23e52cd354", "traffic": {
                     "protocol": "http"
-                }
-            }
-
-        }, {
-            "data": {
-                "id": "a00adf4e5257b3a9924a8df1ea3c5e4c", "source": "ca915b5cac4b04b804de2fb765a400a9", "target": "a6e8b9c7251712237a846fcb4284760a", "traffic": {
-                    "protocol": "http", "rates": {
-                        "http": "0.42",
-                        "http5xx": "0.42", "httpPercentErr": "100.0", "httpPercentReq": "100.0"
-                    }, "responses": {
-                        "500": {
-                            "flags": {
-                                "-": "100.0"
-                            },
-                            "hosts": {
-                                "raincontroller.typhoon.svc.cluster.local": "100.0"
-                            }
-                        }
-                    }
                 }
             }
         },
@@ -728,7 +704,6 @@ const mockdata = {
                 "id": "adafa76988ef81708d76e5a208e42bce", "source": "f26ffc7dea2747259e57fb478989f358", "target": "87ca1c2da7797b39975588b0fff974b0", "traffic": {
                     "protocol": "http"
                 }
-
             }
         },
         {
@@ -740,7 +715,9 @@ const mockdata = {
         },
         {
             "data": {
-                "id": "681a42048bac030a5f4c2ed1b5ecfa91", "source": "f26ffc7dea2747259e57fb478989f358", "target": "89e6d075842608e2dcd23697b7276c05", "traffic": {
+                "id": "681a42048bac030a5f4c2ed1b5ecfa91",
+
+                "source": "f26ffc7dea2747259e57fb478989f358", "target": "89e6d075842608e2dcd23697b7276c05", "traffic": {
                     "protocol": "http"
                 }
             }
@@ -749,29 +726,28 @@ const mockdata = {
             "data": {
                 "id": "f063d646050ad2339d54ef0c6d7db9ae", "source": "f26ffc7dea2747259e57fb478989f358", "target": "af6ff19432f88bc230bf78e983c56081", "traffic": {
                     "protocol": "http", "rates": {
-                        "http": "0.42",
-                        "http5xx": "0.42", "httpPercentErr": "100.0", "httpPercentReq": "100.0"
-                    }, "responses": {
-                        "500": {
+                        "http": "0.27",
+                        "httpPercentReq": "100.0"
+                    },
+                    "responses": {
+                        "200": {
                             "flags": {
                                 "-": "100.0"
-                            },
-                            "hosts": {
+                            }, "hosts": {
                                 "typhoon.typhoon.svc.cluster.local": "100.0"
                             }
                         }
                     }
                 }
             }
-        },
-        {
+        }, {
             "data": {
                 "id": "ba6b825166158d2a26624eb253836713", "source": "f26ffc7dea2747259e57fb478989f358", "target": "c10ceeb7661110bf89efd44bd9135e46", "traffic": {
                     "protocol": "http"
-
                 }
             }
-        }, {
+        },
+        {
             "data": {
                 "id": "eedf7f0ea2557384878d09f7e0ce2f41", "source": "f26ffc7dea2747259e57fb478989f358", "target": "e84e6bf4e15960b10f6eded966c440de", "traffic": {
                     "protocol": "http"
@@ -780,6 +756,7 @@ const mockdata = {
         },
         {
             "data": {
+
                 "id": "0b742db003d58ac8fdc6502d5c6ec9a8", "source": "f8fbc3075ea3918b1a9c47b1543633dc", "target": "a0ff1e33984425198a16bcdc28951497", "traffic": {
                     "protocol": "http"
                 }
@@ -788,6 +765,7 @@ const mockdata = {
         ]
     }
 }
+
 
 
 export default {
