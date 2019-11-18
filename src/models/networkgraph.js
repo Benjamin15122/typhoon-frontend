@@ -117,6 +117,14 @@ const DataClean = (services) => {
     var wid//raincontroller id
     var nkid
     const nodes = dirtyNodes.filter((item) => {
+        if(item.data.service==='raincontroller'){
+            rid = item.data.id
+            return true
+        }
+        if(item.data.service==='windcontroller'){
+            wid = item.data.id
+            return true
+        }
         if(item.data.isUnused){
             return false
         }
@@ -124,12 +132,6 @@ const DataClean = (services) => {
         if(item.data.service==='PassthroughCluster'){
             nkid = item.data.id
             return false
-        }
-        if(item.data.app==='raincontroller'){
-            rid = item.data.id
-        }
-        if(item.data.app==='windcontroller'){
-            wid = item.data.id
         }
         return true
     })
@@ -235,8 +237,6 @@ const DataClean = (services) => {
     }
 }
 
-var lastElements = {}
-
 export default {
     namespace: 'networkgraph',
     state: {
@@ -305,6 +305,7 @@ export default {
             let headers = new Headers()
             headers.set('Authorization', 'Basic ' + btoa(authString))
             while (true) {
+                yield call(delay, 10000)
                 const response = yield call(request, {
                     url: KIALIURL,
                     options: {
@@ -312,15 +313,15 @@ export default {
                     }
                 })
                 // console.log(response)
+                var lastElements = {}
                 const pureRes = Erase(response)
                 const noUpdate = Equals(pureRes,lastElements)
                 if(noUpdate===true){
-                    return
+                    continue
                 }
                 lastElements = pureRes
                 const elements = DataClean(pureRes)
                 yield put({ type: 'update', payload: elements })
-                yield call(delay, 2000)
             }
         }
     }
