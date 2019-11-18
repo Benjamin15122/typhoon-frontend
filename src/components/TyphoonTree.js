@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import CustomButton from './CustomButton'
 import Steps from './Steps'
 import styles from './stylesheets/TyphoonTree.css'
+// import Network from '../pages/theta'
 import Network from '../pages/beta'
 // import Network from '../pages/alpha'
 
@@ -36,14 +37,14 @@ class TyphoonTree extends Component {
     console.log(selectedName)
     this.props.dispatch({
       type: 'networkgraph/fakeUpdateAnimation',
-      payload: 'productpage'
+      payload: selectedId
     })
-    this.props.dispatch({
-      type: "servicetree/executeDrone", payload: {
-        id: selectedId,
-        name: selectedName
-      }
-    })
+    // this.props.dispatch({
+    //   type: "servicetree/executeDrone", payload: {
+    //     id: selectedId,
+    //     name: selectedName
+    //   }
+    // })
   }
 
   onBranchNodeStatus = (keys) => {

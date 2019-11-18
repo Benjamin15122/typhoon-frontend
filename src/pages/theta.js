@@ -364,6 +364,7 @@ G6.registerEdge('can-running', {
 G6.registerEdge('circle-running', {
     afterDraw(cfg, group) {
         const shape = group.get('children')[0];
+        debugger
         const startPoint = shape.getPoint(0);
         const circle = group.addShape('circle', {
             attrs: {
@@ -396,7 +397,7 @@ class AlphaNetwork extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            webSocket:WebSocketForNetwork.createSocket()
+            webSocket: WebSocketForNetwork.createSocket()
         }
         this.saveRef = ref => { this.refDom = ref };
     }
@@ -429,91 +430,38 @@ class AlphaNetwork extends Component {
             defaultEdge: {
                 size: 1,
                 color: "rgb(76,122,187)",
+                style: {
+                    endArrow: {
+                        path: 'M 4,0 L -4,-4 L -4,4 Z',
+                        d: 4
+                    }
+                }
             },
             nodeStyle: {
                 default: {
                     lineWidth: 0.5,
                     fill: '#fff'
                 }
-            }
+            },
+            layout: {
+                type: 'radial',
+                linkDistance: 200,
+                nodeSize: 80,
+                preventOverlap: true,
+            },
         });
         this.graph = graph
         var data = this.props.data
-
-        var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
-            return d.id;
-        }).strength(0.01)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
-
-        function refreshPosition(e) {
-            e.item.get('model').x = e.x;
-            e.item.get('model').y = e.y;
-            graph.refreshPositions();
-        }
-
-        graph.on('node:click', function (e) {
-            const current = e.item.get('model').shape;
-            const origin = e.item.get('model').recover;
-            if (current !== origin) {
-                e.item.get('model').shape = e.item.get('model').recover;
-                e.item.draw();
-                return;
-            }
-            else {
-                e.item.get('model').shape = 'affected-animate';
-                e.item.draw();
-            }
-        })
-
-        graph.on('node:dragstart', function (e) {
-            simulation.alphaTarget(0.3).restart();
-            refreshPosition(e);
-        });
-        graph.on('node:drag', function (e) {
-            refreshPosition(e);
-        });
-        graph.on('node:dragend', function (e) {
-            simulation.alphaTarget(0);
-            refreshPosition(e);
-        });
-
         graph.data(data);
-        simulation.nodes(data.nodes).on("tick", ticked);
-        simulation.force("link").links(data.edges);
 
         graph.render();
 
-        function ticked() {
-            if (!graph.get('data')) {
-                graph.data(data);
-                graph.render();
-            } else {
-                graph.refreshPositions();
-            }
-            graph.paint();
-        }
     }
 
 
     componentDidUpdate() {
         var data = this.props.data
         var graph = this.graph
-        const { clientWidth, clientHeight } = this.refDom;
-        var simulation = d3.forceSimulation().force("link", d3.forceLink().id(function (d) {
-            return d.id;
-        }).strength(0.2)).force("charge", d3.forceManyBody()).force("center", d3.forceCenter(clientWidth / 2, clientHeight / 2));
-        simulation.nodes(data.nodes).on("tick", ticked);
-        simulation.force("link").links(data.edges);
-        function ticked() {
-            if (!graph.get('data')) {
-                graph.data(data);
-                graph.render();
-            } else {
-                graph.refreshPositions();
-            }
-            graph.paint();
-        }
-        // graph.clear()
-        // graph.read(data)
         graph.read(data)
         this.graph = graph
     }

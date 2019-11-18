@@ -130,26 +130,24 @@ const DataClean = (services) => {
                 shape: 'background-animate',
                 recover: 'background-animate',
                 color: '#40a9ff',
-                size: 25,
+                size: 18,
                 labelCfg: {
                     position: 'top',
-                    offset: 10
+                    offset: 5
                 }
             }
         }
         else if (item.data.nodeType === 'service') {
             return {
                 ...item.data,
-                label: item.data.service,
+                // label: item.data.service,
                 name: item.data.service,
-                shape: 'inner-animate',
-                recover: 'inner-animate',
-                updating: false,
-                affected: false,
-                img: service,
+                shape: 'image',
+                recover: 'image',
+                img: application,
                 labelCfg: {
                     position: 'top',
-                    offset: 10
+                    offset: 5
                 }
             }
         }
@@ -161,13 +159,13 @@ const DataClean = (services) => {
                 ...item.data,
                 label: item.data.workload,
                 name: item.data.workload,
-                shape: 'image',
-                recover: 'image',
-                size: [22,22],
-                img: application,
+                shape: 'inner-animate',
+                recover: 'inner-animate',
+                size: [15,15],
+                img: service,
                 labelCfg: {
                     position: 'top',
-                    offset: 10
+                    offset: 5
                 }
             }
         }
@@ -184,7 +182,7 @@ const DataClean = (services) => {
                 name: "frontend-running",
                 shape: 'image',
                 recover: 'image',
-                size: [22,22],
+                size: [10,10],
                 img: application,
                 labelCfg: {
                     position: 'top',
@@ -201,13 +199,13 @@ const DataClean = (services) => {
                 ...item.data,
                 source: fvid,
                 shape: 'circle-running',
-                lineWidth: 0.5
+                lineWidth: 1
             }
         }
         return {
             ...item.data,
             shape: 'circle-running',
-            lineWidth: 0.5
+            lineWidth: 1
         }
     })
 
