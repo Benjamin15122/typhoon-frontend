@@ -11,6 +11,10 @@ export default {
     "/kiali": {
       "target": "http://114.212.189.141:31597/",
       "changeOrigin": true
+    },
+    "/typhoon": {
+      "target": "https://git.njuics.cn/",
+      "changeOrigin": true
     }
   },
   plugins: [

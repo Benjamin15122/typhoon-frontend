@@ -1,6 +1,7 @@
 import React from 'react'
 import { Slider } from 'antd'
-
+import WebSocketForNetwork from './websocket'
+import { connect } from 'dva'
 import styles from './index.css'
 import Icon from '../components/Icon'
 import Drawer from '../components/Drawer'
@@ -10,12 +11,31 @@ import TyphoonTree from '../components/TyphoonTree'
 
 import "antd/dist/antd.css"
 
+let updatable = true
+
 class App extends React.Component {
+
+  updateService = (e) => {
+    console.log(e)
+    if(e.data==="\"Update start ... \""&&updatable===true){
+        this.props.dispatch({
+            type: "networkgraph/fakeUpdateAnimation"
+        })
+    }else if(e.data==="\"Update end ... \""&&updatable===true){
+        this.props.dispatch({
+            type: "networkgraph/fakeFinishAnimation"
+        })
+        updatable=false
+        setTimeout(()=>{
+          updatable=true
+        },12000)
+    }
+}
   render() {
 
     /* 地图控件 */
-    const map = <TyphoonMap pause={this.state.pause} speed={this.state.speed} />
-    // const map = <div/>
+    // const map = <TyphoonMap pause={this.state.pause} speed={this.state.speed} />
+    const map = <div/>
 
     /* 底部抽屉 */
     const bottomDrawer = (
@@ -92,6 +112,7 @@ class App extends React.Component {
       menuSwitchIn: true,
       menuIn: false,
       bottomDrawerPulled: false,
+      webSocket:WebSocketForNetwork.createSocket(this.updateService),
       pause: false,
       speed: 2000
     }
@@ -130,4 +151,4 @@ class App extends React.Component {
   }
 }
 
-export default App 
+export default connect(state=>state)(App)

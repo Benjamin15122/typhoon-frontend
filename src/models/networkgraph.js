@@ -5,7 +5,7 @@ import request from '../utils/request'
 import status from '../utils/status'
 const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
 // const KIALIURL = '/mockdata'
-
+var lastElements = {}
 const DataFakeUpdate = (elements, dirtyServiceName) => {
     const dirtyArray = dirtyServiceName.split('-')
     let serviceName = dirtyArray.reduce((accumulator, current, index) => {
@@ -25,10 +25,11 @@ const DataFakeUpdate = (elements, dirtyServiceName) => {
     })
     let aids = []
     edges.forEach((item) => {
-        if (item.target === uid) {
-            aids.push(item.source)
+        if (item.target.id === uid) {
+            aids.push(item.source.id)
         }
     })
+    console.log(aids)
     nodes.forEach((item) => {
         if (aids.includes(item.id)) {
             item.shape = status.AFFECTED
@@ -119,22 +120,22 @@ const DataClean = (services) => {
     const nodes = dirtyNodes.filter((item) => {
         if (item.data.service === 'raincontroller') {
             rid = item.data.id
-            console.log('rid: '+rid)
+            // console.log('rid: '+rid)
             return true
         }
         if (item.data.service === 'windcontroller') {
             wid = item.data.id
-            console.log('wid: '+wid)
+            // console.log('wid: '+wid)
             return true
         }
         if (item.data.app === 'raincontroller') {
             rvid = item.data.id
-            console.log('rvid: '+rvid)
+            // console.log('rvid: '+rvid)
             return true
         }
         if (item.data.app === 'windcontroller') {
             wvid = item.data.id
-            console.log('wvid: '+wvid)
+            // console.log('wvid: '+wvid)
             return true
         }
         if (item.data.isUnused) {
@@ -224,8 +225,8 @@ const DataClean = (services) => {
         return true
     })
 
-    if(fvid!==undefined){
-        if(rid!==undefined){
+    if (fvid !== undefined) {
+        if (rid !== undefined) {
             neatEdges.push({
                 id: fvid + rid,
                 source: fvid,
@@ -234,7 +235,7 @@ const DataClean = (services) => {
                 lineWidth: 1
             })
         }
-        if(wid!==undefined){
+        if (wid !== undefined) {
             neatEdges.push({
                 id: fvid + wid,
                 source: fvid,
@@ -245,7 +246,7 @@ const DataClean = (services) => {
         }
     }
 
-    if(wid!==undefined&&wvid!==undefined){
+    if (wid !== undefined && wvid !== undefined) {
         neatEdges.push({
             id: wvid + wid,
             source: wid,
@@ -255,7 +256,7 @@ const DataClean = (services) => {
         })
     }
 
-    if(rvid!==undefined&&wvid!==undefined){
+    if (rvid !== undefined && wvid !== undefined) {
         neatEdges.push({
             id: rvid + rid,
             source: rid,
@@ -305,25 +306,29 @@ export default {
                 data: payload
             }
         },
-        updateService(state, {payload}){
+        updateService(state, { payload }) {
             return {
                 ...state,
                 service: payload
             }
-        }
+        },
+        fakeUpdateAnimation(state, _) {
+            const serviceName = state.service
+            let elements = state.data
+            const updatingElements = DataFakeUpdate(elements, serviceName)
+            return {
+                ...state,
+                data: updatingElements
+            }
+        },
     },
     effects: {
-        *fakeUpdateAnimation(_, { put, select }) {
-            const serviceName = yield select( state=>state.service)
-            let elements = yield select( state => state.data)
-            const updatingElements = DataFakeUpdate(elements, serviceName)
-            yield put({ type: 'update', payload: updatingElements })
-        },
-        *fakeFinishAnimation(_,{call,put,select}){
-            const serviceName = yield select( state=>state.service)
-            let elements = yield select( state => state.data)
-            const updatingElements = DataFakeUpdate(elements, serviceName)
+        *fakeFinishAnimation(_, { call, put, select }) {
+            // const serviceName = yield select(state => state.service)
+            // let elements = yield select(state => state.data)
+            // const updatingElements = DataFakeUpdate(elements, serviceName)
             yield call(delay, 5000)
+            const updatingElements = yield select(state => state.networkgraph.data)
             const finishedElements = DataFakeFinish(updatingElements)
             yield put({ type: 'update', payload: finishedElements })
             yield call(delay, 2000)
@@ -337,36 +342,29 @@ export default {
                 }
             })
             const pureRes = Erase(response)
-            elements = DataClean(pureRes)
+            let elements = DataClean(pureRes)
             yield put({ type: 'update', payload: elements })
         },
         *fetchGraphData(_, { call, put }) {
             let authString = 'admin:admin'
             let headers = new Headers()
             headers.set('Authorization', 'Basic ' + btoa(authString))
-            let i = 0, j = 1
-            while (i <= 10) {
-                const response = yield call(request, {
-                    url: KIALIURL,
-                    options: {
-                        headers: headers
-                    }
-                })
-                // console.log(response)
-                var lastElements = {}
-                const pureRes = Erase(response)
-                const noUpdate = Equals(pureRes, lastElements)
-                if (noUpdate === true) {
-                    yield call(delay, 1000)
-                    continue
+            const response = yield call(request, {
+                url: KIALIURL,
+                options: {
+                    headers: headers
                 }
-                lastElements = pureRes
-                const elements = DataClean(pureRes)
-                yield call(delay, 1000*i)
-                yield put({ type: 'update', payload: elements })
-                i = i + j
-                j = j + 1
+            })
+            // console.log(response)
+            const pureRes = Erase(response)
+            const noUpdate = Equals(pureRes, lastElements)
+            if (noUpdate === true) {
+                yield call(delay, 1000)
             }
+            lastElements = pureRes
+            const elements = DataClean(pureRes)
+            yield call(delay, 1000)
+            yield put({ type: 'update', payload: elements })
         }
     }
 }

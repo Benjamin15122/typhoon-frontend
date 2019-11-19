@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import CustomButton from './CustomButton'
 import Steps from './Steps'
 import styles from './stylesheets/TyphoonTree.css'
+import Link from 'umi/link'
 // import Network from '../pages/theta'
 import Network from '../pages/beta'
 // import Network from '../pages/alpha'
@@ -37,17 +38,23 @@ class TyphoonTree extends Component {
   }
 
   onBranchNodeSelect = (selectedName, selectedId) => {
-    console.log(selectedId)
-    console.log(selectedName)
+    // console.log(selectedId)
+    // console.log(selectedName)
     notification['info']({
       message: 'Rebuilding started ',
       description:
-        'service: '+selectedId+'\n'+'version: '+selectedName,
+        'service: ' + selectedId + '\n' + 'version: ' + selectedName,
     });
     this.props.dispatch({
       type: 'networkgraph/updateService',
       payload: selectedId
     })
+    // this.props.dispatch({
+    //   type: "networkgraph/fakeUpdateAnimation"
+    // })
+    // this.props.dispatch({
+    //   type: "networkgraph/fakeFinishAnimation"
+    // })
     this.props.dispatch({
       type: "servicetree/executeDrone", payload: {
         id: selectedId,
@@ -82,7 +89,8 @@ class TyphoonTree extends Component {
     const serviceNodeList = this.props.serviceList.map((serviceNode) => {
       return (
         <TreeNode
-          icon={<Icon type="code" theme="twoTone" />}
+          icon={<a href={"https://git.njuics.cn/typhoon/" + serviceNode.serviceName} target="_blank" rel="noopener noreferrer"><Icon type="github" /></a>}
+          // icon={<Icon type="code" theme="twoTone" />}
           title={serviceNode.serviceName}
           key={serviceNode.serviceName} />
       )
@@ -138,8 +146,8 @@ class TyphoonTree extends Component {
     //   )
     // })
 
-    const branchNodeListDisplay = this.props.branchNodeList.map((branchNodeInfo) => {  
-      console.log(branchNodeInfo.status)
+    const branchNodeListDisplay = this.props.branchNodeList.map((branchNodeInfo) => {
+      // console.log(branchNodeInfo.status)
       return (
         <Timeline.Item key={branchNodeInfo.id}
           dot={
@@ -155,7 +163,7 @@ class TyphoonTree extends Component {
                 // })
               }}>
               {/* <IconFont type="icon-commit1" style={{ fontSize: '20px' }}/> */}
-              {branchNodeInfo.iconType==="icon-loading"?<Icon type="loading" style={{ fontSize: '20px' }}/>:<IconFont
+              {branchNodeInfo.iconType === "icon-loading" ? <Icon type="loading" style={{ fontSize: '20px' }} /> : <IconFont
                 type={branchNodeInfo.iconType}
                 //theme="twoTone"
                 //twoToneColor="#52c41a"
@@ -164,14 +172,14 @@ class TyphoonTree extends Component {
             </CustomButton>
           }
         >
-          <Descriptions  title={branchNodeInfo.short_id} border size="small" column={1}>
-            </Descriptions>
-            时间: {branchNodeInfo.createtime}<br />
-            状态:  <Badge status={branchNodeInfo.badgestatus} text={branchNodeInfo.status} /><br />
-            信息: <br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clone: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.clone : ""}<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;publish: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.publish : ""}<br />
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deploy: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.deploy : ""}
+          <Descriptions title={branchNodeInfo.short_id} border size="small" column={1}>
+          </Descriptions>
+          时间: {branchNodeInfo.createtime}<br />
+          状态:  <Badge status={branchNodeInfo.badgestatus} text={branchNodeInfo.status} /><br />
+          信息: <br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clone: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.clone : ""}<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;publish: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.publish : ""}<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;deploy: {branchNodeInfo.detailedstatus !== null ? branchNodeInfo.detailedstatus.deploy : ""}
         </Timeline.Item>
       )
     })
