@@ -187,14 +187,17 @@ class TyphoonTree extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.leftDiv}>
+          <div style={{ margin: '5px' }}><h3>Microservices Tree</h3></div>
           {microservicesTree}
         </div>
 
         <div className={styles.middleDiv}>
+          <div style={{ margin: '5px' }}><h3 style={{ marginBottom: '10px' }}>Topological Graph</h3></div>
           <Network />
         </div>
 
         <div className={styles.rightDiv}>
+          <div style={{ marginBottom: '10px' }}><h3 style={{ marginBottom: '10px' }}>Version Timeline</h3></div>
           {branchNodeListDisplay}
         </div>
       </div>
