@@ -119,18 +119,22 @@ const DataClean = (services) => {
     const nodes = dirtyNodes.filter((item) => {
         if (item.data.service === 'raincontroller') {
             rid = item.data.id
+            console.log('rid: '+rid)
             return true
         }
         if (item.data.service === 'windcontroller') {
             wid = item.data.id
+            console.log('wid: '+wid)
             return true
         }
         if (item.data.app === 'raincontroller') {
             rvid = item.data.id
+            console.log('rvid: '+rvid)
             return true
         }
         if (item.data.app === 'windcontroller') {
             wvid = item.data.id
+            console.log('wvid: '+wvid)
             return true
         }
         if (item.data.isUnused) {
