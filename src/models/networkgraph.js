@@ -3,7 +3,9 @@ import service from '../assets/service.svg'
 import application from '../assets/application.svg'
 import request from '../utils/request'
 import status from '../utils/status'
-const KIALIURL = '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
+import DEBUG from '../utils/debug'
+import { notification } from 'antd';
+const KIALIURL = DEBUG ? '/mockdata' : '/kiali/api/namespaces/graph?edges=requestsPercentage&graphType=versionedApp&namespaces=typhoon&injectServiceNodes=true&duration=60s&pi=15000&layout=dagre'
 // const KIALIURL = '/mockdata'
 var lastElements = {}
 const DataFakeUpdate = (elements, dirtyServiceName) => {
@@ -344,6 +346,9 @@ export default {
             const pureRes = Erase(response)
             let elements = DataClean(pureRes)
             yield put({ type: 'update', payload: elements })
+            notification['success']({
+                message: 'Update succeeded ',
+            });
         },
         *fetchGraphData(_, { call, put }) {
             let authString = 'admin:admin'

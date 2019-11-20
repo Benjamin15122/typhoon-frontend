@@ -1,5 +1,5 @@
 import React from 'react'
-import { Slider } from 'antd'
+import { Slider, notification } from 'antd'
 import WebSocketForNetwork from './websocket'
 import { connect } from 'dva'
 import styles from './index.css'
@@ -8,6 +8,7 @@ import Drawer from '../components/Drawer'
 import FlexibleView from '../components/FlexibleView'
 import TyphoonMap from '../components/TyphoonMap'
 import TyphoonTree from '../components/TyphoonTree'
+import DEBUG from '../utils/debug'
 
 import "antd/dist/antd.css"
 
@@ -17,25 +18,29 @@ class App extends React.Component {
 
   updateService = (e) => {
     console.log(e)
-    if(e.data==="\"Update start ... \""&&updatable===true){
+    if (e.data === "\"Update start ... \"" && updatable === true) {
+      setTimeout(() => {
+        notification['info']({
+          message: 'Update processing ',
+        });
         this.props.dispatch({
-            type: "networkgraph/fakeUpdateAnimation"
+          type: "networkgraph/fakeUpdateAnimation"
         })
-    }else if(e.data==="\"Update end ... \""&&updatable===true){
-        this.props.dispatch({
-            type: "networkgraph/fakeFinishAnimation"
-        })
-        updatable=false
-        setTimeout(()=>{
-          updatable=true
-        },12000)
+      },5000)
+    } else if (e.data === "\"Update end ... \"" && updatable === true) {
+      this.props.dispatch({
+        type: "networkgraph/fakeFinishAnimation"
+      })
+      updatable = false
+      setTimeout(() => {
+        updatable = true
+      }, 12000)
     }
-}
+  }
   render() {
 
     /* 地图控件 */
-    const map = <TyphoonMap pause={this.state.pause} speed={this.state.speed} />
-    // const map = <div/>
+    const map = DEBUG ? <div /> : <TyphoonMap pause={this.state.pause} speed={this.state.speed} />
 
     /* 底部抽屉 */
     const bottomDrawer = (
@@ -112,7 +117,7 @@ class App extends React.Component {
       menuSwitchIn: true,
       menuIn: false,
       bottomDrawerPulled: false,
-      webSocket:WebSocketForNetwork.createSocket(this.updateService),
+      webSocket: WebSocketForNetwork.createSocket(this.updateService),
       pause: false,
       speed: 2000
     }
@@ -151,4 +156,4 @@ class App extends React.Component {
   }
 }
 
-export default connect(state=>state)(App)
+export default connect(state => state)(App)

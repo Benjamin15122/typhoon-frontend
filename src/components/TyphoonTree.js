@@ -5,10 +5,12 @@ import CustomButton from './CustomButton'
 import Steps from './Steps'
 import styles from './stylesheets/TyphoonTree.css'
 import Link from 'umi/link'
+import DEBUG from '../utils/debug'
 // import Network from '../pages/theta'
 import Network from '../pages/beta'
 // import Network from '../pages/alpha'
 
+let clickable = true
 const { TreeNode } = Tree;
 
 const IconFont = Icon.createFromIconfontCN({
@@ -33,6 +35,9 @@ class TyphoonTree extends Component {
 
   onTreeNodeSelect = (keys, e) => {
     this.props.dispatch({
+      type: "servicetree/updateService", payload: keys[0]
+    })
+    this.props.dispatch({
       type: "servicetree/getBranch", payload: keys
     })
   }
@@ -49,18 +54,30 @@ class TyphoonTree extends Component {
       type: 'networkgraph/updateService',
       payload: selectedId
     })
-    // this.props.dispatch({
-    //   type: "networkgraph/fakeUpdateAnimation"
-    // })
-    // this.props.dispatch({
-    //   type: "networkgraph/fakeFinishAnimation"
-    // })
-    this.props.dispatch({
-      type: "servicetree/executeDrone", payload: {
-        id: selectedId,
-        name: selectedName
-      }
-    })
+    if (DEBUG) {
+      setTimeout(() => {
+        notification['info']({
+          message: 'Update started ',
+        });
+        notification['warning']({
+          message: 'Update processing ',
+        });
+        this.props.dispatch({
+          type: "networkgraph/fakeUpdateAnimation"
+        })
+        this.props.dispatch({
+          type: "networkgraph/fakeFinishAnimation"
+        })
+      },5000)
+    }
+    else {
+      this.props.dispatch({
+        type: "servicetree/executeDrone", payload: {
+          id: selectedId,
+          name: selectedName
+        }
+      })
+    }
   }
 
   onBranchNodeStatus = (keys) => {
@@ -187,17 +204,27 @@ class TyphoonTree extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.leftDiv}>
-          <div style={{ margin: '5px' }}><h3>Microservices Tree</h3></div>
+          <div style={{ margin: '5px' }}><h3>{"微服务代码仓库"}</h3></div>
           {microservicesTree}
         </div>
 
         <div className={styles.middleDiv}>
-          <div style={{ margin: '5px' }}><h3 style={{ marginBottom: '10px' }}>Topological Graph</h3></div>
+          <div style={{ margin: '5px' }}><h3>{"微服务拓扑结构"}</h3></div>
           <Network />
         </div>
-
+        <div className={styles.contactDiv} onClick={() => {
+          if (clickable) {
+            console.log('clicked')
+            clickable = false
+            setTimeout(() => {
+              clickable = true
+            }, 5000)
+          }
+        }
+        } />
         <div className={styles.rightDiv}>
-          <div style={{ marginBottom: '10px' }}><h3 style={{ marginBottom: '10px' }}>Version Timeline</h3></div>
+          <h3>{"版本演化时间线"}</h3>
+          <h3>{this.props.service ? this.props.service : ""}</h3>
           {branchNodeListDisplay}
         </div>
       </div>
@@ -208,6 +235,7 @@ class TyphoonTree extends Component {
 export default connect((state) => {
   return {
     ...state.servicetree,
-    serviceGraph: state.servicegraph
+    serviceGraph: state.servicegraph,
+    service: state.servicetree.service
   }
 })(TyphoonTree);

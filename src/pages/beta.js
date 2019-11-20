@@ -411,6 +411,7 @@ class BetaNetwork extends Component {
             height: clientHeight,
             autoPaint: false,
             animate: true,
+            // fitView: true,
             modes: {
                 default: ['drag-canvas', {
                     type: 'tooltip',

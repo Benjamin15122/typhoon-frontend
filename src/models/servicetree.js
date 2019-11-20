@@ -27,6 +27,7 @@ export default {
     clickedBranchNodeInfo: '',
     prevNodeStatus: '',
     count: 0,
+    service: null
   },
   reducers: {
     updateServiceList(state, { payload }) {
@@ -40,6 +41,13 @@ export default {
       return {
         ...state,
         branchNodeList: payload,
+      }
+    },
+
+    updateService(state, {payload}){
+      return {
+        ...state,
+        service: payload
       }
     },
 
