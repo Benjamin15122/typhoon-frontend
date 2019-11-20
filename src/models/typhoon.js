@@ -89,7 +89,7 @@ export default {
           strokeOpacity: 0
         }} />,
         cityWeatherList: newCityWeatherList,
-        typhoonPathPolyline: <Polyline path={newPath} style={{ strokeColor: "#FFFFFF", strokeWeight: "3" }} />
+        typhoonPathPolyline: <Polyline path={newPath} style={{ strokeColor: "#FF0000", strokeWeight: "3" }} />
       }
     }
   },

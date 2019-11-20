@@ -31,31 +31,11 @@ class TyphoonMap extends React.Component {
   render() {
 
     /* 台风沿途受影响城市标记 */
-    const cityMarkerList = this.props.cityWeatherList.map((cityWeather) => {
-
-      return (
-        <TyphoonMarker key={cityWeather.city} className={styles.cityMarker} position={cityWeather.position}>
-          <div className={styles.cityMarkerIcon} />
-          {/* {cityWeather.weatherData.map((weather,index) => {
-
-            const style = {
-              position: "absolute",
-              left: 0+"%",
-              top: index*25+"%",
-              width: "100%",
-              height: "25%"
-            }
-
-            return (
-              <div key={Math.random()} style={style}>
-                <div className={styles.cityWeatherTitle}>{nameTransform[weather.property]}</div>
-                <div className={styles.cityWeatherValue}>{weather.dataPoints[weather.dataPoints.length - 1].y.toFixed(3)}</div>
-              </div>
-            )
-          })} */}
-        </TyphoonMarker>
-      )
-    })
+    const cityMarkerList = this.props.cityWeatherList.map(cityWeather => (
+      <TyphoonMarker key={cityWeather.city} className={styles.cityMarker} position={cityWeather.position}>
+        <div className={styles.cityMarkerIcon} />
+      </TyphoonMarker>
+    ))
 
     /* 受影响城市天气信息 */
     const cityWeatherDiv = (
