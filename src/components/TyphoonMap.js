@@ -117,7 +117,7 @@ class TyphoonMap extends React.Component {
     if (!this.props.pause) {
       this.props.dispatch({
         type: "typhoon/fetchData",
-        url: "/wind",
+        url: "/weather",
         index: Math.floor((this.index) % 80)
       })
 
